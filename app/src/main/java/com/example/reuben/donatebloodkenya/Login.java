@@ -129,7 +129,7 @@ public class Login extends AppCompatActivity {
                 twitter.setOnClickListener(new OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Uri webpage = Uri.parse("https://www.instagram.com/reuben_bichage");
+                        Uri webpage = Uri.parse("https://www.twitter.com/reuben_bichage");
                         Intent igintent =new  Intent(Intent.ACTION_VIEW, webpage);
                         PackageManager packageManager = getPackageManager();
                         List<ResolveInfo> activities = packageManager.queryIntentActivities(igintent, 0);
@@ -147,7 +147,7 @@ public class Login extends AppCompatActivity {
                 instagram.setOnClickListener(new OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Uri webpage = Uri.parse("https://www.twitter.com/reuben_bichage");
+                        Uri webpage = Uri.parse("https://www.instagram.com/reuben_bichage");
                         Intent twitterintent =new  Intent(Intent.ACTION_VIEW, webpage);
                         PackageManager packageManager = getPackageManager();
                         List<ResolveInfo> activities = packageManager.queryIntentActivities(twitterintent, 0);
