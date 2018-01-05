@@ -66,7 +66,7 @@
             android:textAllCaps="false" />
 
         <TextView
-            android:id="@+id/tvreset"
+            android:id="@+id/tvReset"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/blogin"
@@ -78,7 +78,7 @@
             android:id="@+id/tvRegister"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/tvreset"
+            android:layout_below="@+id/tvReset"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="18dp"
             android:text="@string/register_here" />
@@ -93,20 +93,20 @@
             android:id="@+id/linearLayout">
 
             <ImageView
-                android:id="@+id/imageView4"
+                android:id="@+id/twitter"
                 android:layout_width="30dp"
                 android:layout_height="wrap_content"
                 app:srcCompat="@drawable/twitter" />
 
             <ImageView
-                android:id="@+id/imageView3"
+                android:id="@+id/instagram"
                 android:layout_width="30dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="15dp"
                 app:srcCompat="@drawable/instagram" />
 
             <ImageView
-                android:id="@+id/imageView2"
+                android:id="@+id/facebook"
                 android:layout_width="30dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="15dp"
