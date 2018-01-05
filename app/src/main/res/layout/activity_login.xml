@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/gradient">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="120dp"
+            android:layout_height="120dp"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="21dp"
+            android:src="@drawable/ic_launcher" />
+
+        <EditText
+            android:id="@+id/etuname"
+            android:layout_width="250dp"
+            android:layout_height="40dp"
+            android:layout_below="@+id/imageView"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="25dp"
+            android:background="#11000000"
+            android:drawableStart="@drawable/ic_account_circle_black_24dp"
+            android:ems="10"
+            android:hint="@string/username"
+            android:inputType="textPersonName"
+            android:textSize="16sp" />
+
+        <EditText
+            android:id="@+id/et_password"
+            android:layout_width="250dp"
+            android:layout_height="40dp"
+
+            android:layout_alignStart="@+id/etuname"
+            android:layout_below="@+id/etuname"
+            android:layout_marginTop="31dp"
+            android:background="#11000000"
+            android:drawableStart="@drawable/ic_lock"
+            android:ems="10"
+            android:hint="@string/password"
+            android:inputType="textPassword"
+            tools:ignore="RtlHardcoded" />
+
+        <Button
+            android:id="@+id/blogin"
+            android:layout_width="200dp"
+            android:layout_height="40dp"
+            android:layout_alignTop="@+id/et_password"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="75dp"
+            android:background="@drawable/button_shape"
+            android:text="@string/login"
+            android:textAlignment="center"
+            android:textColor="#1b1a1a"
+            android:textAllCaps="false" />
+
+        <TextView
+            android:id="@+id/tvreset"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/blogin"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="22dp"
+            android:text="@string/forgot_password" />
+
+        <TextView
+            android:id="@+id/tvRegister"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tvreset"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="18dp"
+            android:text="@string/register_here" />
+
+        <LinearLayout
+            android:layout_below="@id/tvRegister"
+            android:layout_width="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_height="50dp"
+            android:orientation="horizontal"
+            android:layout_alignStart="@+id/imageView"
+            android:id="@+id/linearLayout">
+
+            <ImageView
+                android:id="@+id/imageView4"
+                android:layout_width="30dp"
+                android:layout_height="wrap_content"
+                app:srcCompat="@drawable/twitter" />
+
+            <ImageView
+                android:id="@+id/imageView3"
+                android:layout_width="30dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="15dp"
+                app:srcCompat="@drawable/instagram" />
+
+            <ImageView
+                android:id="@+id/imageView2"
+                android:layout_width="30dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="15dp"
+                app:srcCompat="@drawable/facebook" />
+        </LinearLayout>
+
+        </RelativeLayout>
+
+
+
+    </ScrollView>
+
+
+
+
+
+</RelativeLayout>
