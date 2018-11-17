@@ -1,6 +1,5 @@
-package com.example.reuben.donatebloodkenya;
+package com.example.reuben.donatebloodkenya.Activities;
 
-import android.animation.Animator;
 import android.content.Intent;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
@@ -11,7 +10,7 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import java.util.concurrent.Delayed;
+import com.example.reuben.donatebloodkenya.R;
 
 public class MainActivity extends AppCompatActivity {
     public  static  int SPLASH_TIMEOUT =4000;

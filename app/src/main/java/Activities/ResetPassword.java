@@ -1,4 +1,4 @@
-package com.example.reuben.donatebloodkenya;
+package com.example.reuben.donatebloodkenya.Activities;
 
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
@@ -9,6 +9,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
+
+import com.example.reuben.donatebloodkenya.R;
 
 public class ResetPassword extends AppCompatActivity {
     EditText editText;
@@ -30,7 +32,7 @@ public class ResetPassword extends AppCompatActivity {
                     editText.setError("please enter email");
                 else if (!editText.getText().toString().trim().matches("[a-zA-Z0-9._-]+@[a-z]+.[a-z]+")) {
 
-                    editText.setError("Invalid Email Address");
+                    editText.setError("enter a valid Email Address");
 
                 }
                 else
