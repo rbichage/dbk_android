@@ -101,7 +101,7 @@ public class Register extends AppCompatActivity implements View.OnClickListener{
                             public void onDateSet(DatePicker view, int year,
                                                   int monthOfYear, int dayOfMonth) {
 
-                                birth_date.setText(R.string.date);
+                                birth_date.setText(year + "-" + (monthOfYear + 1) + "-" + dayOfMonth);
 
                             }
                         }, mYear, mMonth, mDay);
