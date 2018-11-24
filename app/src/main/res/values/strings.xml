@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Donatebloodkenya</string>
+    <string name="app_name">Dbk</string>
     <string name="title_activity_login">"Sign in "</string>
 
     <!-- Strings related to login -->
@@ -17,14 +17,48 @@
     <string name="sign_in">sign in</string>
     <string name="sign_in_action">Sign in</string>
     <string name="action_reset">Reset password</string>
-    <string name="password">password</string>
-    <string name="username">username</string>
-    <string name="login">Login</string>
-    <string name="register_here">Register Here.</string>
-    <string name="tap_to_register">Tap to register</string>
-    <string name="welcome_to_dbk">Please wait😊😊😊</string>
-    <string name="forgot_password">forgot password?</string>
+    <string name="password"> \tpassword</string>
+    <string name="username"> \tusername</string>
+    <string name="login"> Login</string>
+    <string name="register_here"> Register Here.</string>
+    <string name="tap_to_register"> Tap to register</string>
+    <string name="welcome_to_dbk"> Please wait</string>
+    <string name="forgot_password"> forgot password?</string>
     <string name="email_action">We will send you a reset link to the email you provide</string>
     <string name="send_link">send link</string>
     <string name="your_email_addresss">your email addresss</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="tv_register">Please Register to Continue</string>
+    <string name="instagram_url">https://www.instagram.com/reuben_bichage</string>
+    <string name="first_name">\tfirst name</string>
+    <string name="last_name">\tlast name</string>
+    <string name="current_county">Current County</string>
+    <string name="date_of_birth">\tDate Of Birth</string>
+    <string name="register">register</string>
+    <string name="email_address">\temail address</string>
+    <string name="login_here">login here</string>
+    <string name="me">ME</string>
+    <string name="news">NEWS</string>
+    <string name="events">EVENTS</string>
+    <string name="random_text">Why painful the sixteen how minuter looking nor. Subject but why ten earnest husband imagine sixteen brandon.
+        Are unpleasing occasional celebrated motionless unaffected conviction out.
+        Evil make to no five they. Stuff at avoid of sense small fully it whose an.
+        Ten scarcely distance moreover handsome age although. As when have find fine or said no mile.
+        He in dispatched in imprudence dissimilar be possession unreserved insensible. She evil face fine calm have now.
+        Separate screened he outweigh of distance landlord. How promotion excellent curiosity yet attempted happiness.
+        Gay prosperous impression had conviction. For every delay death ask style.
+        Me mean able my by in they. Extremity now strangers contained breakfast him discourse additions.
+        Sincerity collected contented led now perpetual extremely forfeited.</string>
+    <string name="contact_admin">contact admin</string>
+    <string name="settings">settings</string>
+    <string name="contact_us">contact us</string>
+    <string name="about">About</string>
+    <string name="logout">logout</string>
+    <string name="profile">profile</string>
+    <string name="date">
+        year + "-" + (monthOfYear + 1) + "-" + dayOfMonth
+    </string>
+    <string name="name">Name: </string>
 </resources>

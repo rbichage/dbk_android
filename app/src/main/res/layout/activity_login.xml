@@ -14,38 +14,39 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-        <ImageView
-            android:id="@+id/imageView"
-            android:layout_width="120dp"
-            android:layout_height="120dp"
-            android:layout_alignParentTop="true"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="21dp"
-            android:src="@drawable/ic_launcher" />
+            <ImageView
+                android:id="@+id/imageView"
+                android:layout_width="120dp"
+                android:layout_height="120dp"
+                android:layout_alignEnd="@+id/tvRegister"
+                android:layout_alignParentTop="true"
+                android:layout_marginTop="60dp"
+                android:layout_marginEnd="-16dp"
+                android:src="@drawable/ic_launcher" />
 
-        <EditText
-            android:id="@+id/etuname"
-            android:layout_width="250dp"
-            android:layout_height="40dp"
-            android:layout_below="@+id/imageView"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="25dp"
-            android:background="#11000000"
-            android:drawableStart="@drawable/ic_account_circle_black_24dp"
-            android:ems="10"
-            android:hint="@string/username"
-            android:inputType="textPersonName"
-            android:textSize="16sp" />
+            <EditText
+                android:id="@+id/username"
+                android:layout_width="250dp"
+                android:layout_height="40dp"
+                android:layout_below="@+id/imageView"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="38dp"
+                android:background="@drawable/edit_shape"
+                android:drawableStart="@drawable/ic_account_circle_black_24dp"
+                android:ems="10"
+                android:hint="@string/username"
+                android:inputType="textPersonName"
+                android:textSize="16sp" />
 
         <EditText
             android:id="@+id/et_password"
             android:layout_width="250dp"
             android:layout_height="40dp"
 
-            android:layout_alignStart="@+id/etuname"
-            android:layout_below="@+id/etuname"
+            android:layout_alignStart="@+id/username"
+            android:layout_below="@+id/username"
             android:layout_marginTop="31dp"
-            android:background="#11000000"
+            android:background="@drawable/edit_shape"
             android:drawableStart="@drawable/ic_lock"
             android:ems="10"
             android:hint="@string/password"
@@ -65,7 +66,21 @@
             android:textColor="#1b1a1a"
             android:textAllCaps="false" />
 
+            <ProgressBar
+                android:id="@+id/progress_bar"
+                style="@style/Base.TextAppearance.AppCompat.Large"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:layout_centerInParent="true"
+                android:progressBackgroundTint="#FFF"
+                android:layout_alignBottom="@+id/blogin"
+                android:layout_centerHorizontal="true"
+                android:layout_marginBottom="-49dp"
+                android:visibility="invisible" />
+
+
         <TextView
+            android:textStyle="bold"
             android:id="@+id/tvReset"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -75,6 +90,7 @@
             android:text="@string/forgot_password" />
 
         <TextView
+            android:textStyle="bold"
             android:id="@+id/tvRegister"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -84,6 +100,7 @@
             android:text="@string/register_here" />
 
         <LinearLayout
+            android:layout_marginTop="50dp"
             android:layout_below="@id/tvRegister"
             android:layout_width="wrap_content"
             android:layout_alignParentBottom="true"
@@ -96,7 +113,8 @@
                 android:id="@+id/twitter"
                 android:layout_width="30dp"
                 android:layout_height="wrap_content"
-                app:srcCompat="@drawable/twitter" />
+                app:srcCompat="@drawable/twitter"
+                android:contentDescription="@string/profile" />
 
             <ImageView
                 android:id="@+id/instagram"
