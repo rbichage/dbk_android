@@ -1,15 +1,13 @@
 package activities;
 
-import android.content.Context;
+import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.design.widget.Snackbar;
-import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -20,24 +18,32 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.reuben.donatebloodkenya.R;
+import com.google.android.material.snackbar.Snackbar;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
 import java.util.List;
 
-import okhttp3.ResponseBody;
+import api.RetrofitClient;
+import models.Donor;
+import models.LoginResponse;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import services.RetrofitClient;
+import storage.SharedPrefManager;
 
 /**
  * A login screen that offers login via email/password.
  */
-public class Login extends AppCompatActivity implements OnClickListener {
+public class Login extends Activity implements OnClickListener {
     TextView tvReset, tvRegister;
-    ProgressBar progressBar;
     EditText etuname, etpass;
     Button blogin;
     ImageView facebook, instagram, twitter;
+    ProgressDialog progressDialog;
+    ProgressBar progressBar;
 
     @Override
     protected  void onCreate(Bundle savedInstanceState) {
@@ -50,6 +56,7 @@ public class Login extends AppCompatActivity implements OnClickListener {
         etuname = findViewById(R.id.username);
         etpass = findViewById(R.id.et_password);
         blogin = findViewById(R.id.blogin);
+
 
 
         findViewById(R.id.blogin).setOnClickListener(this);
@@ -75,15 +82,27 @@ public class Login extends AppCompatActivity implements OnClickListener {
 
 
 
+
+
     }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        if (SharedPrefManager.getInstance(this).isLoggedIn()){
+            Intent intent = new Intent(Login.this, UserProfile.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            startActivity(intent);
+        }
+    }
 
     private void userLogin() {
 
 
         String username = etuname.getText().toString().trim();
         if (username.isEmpty()){
-            etuname.setError("please enter username");
+            etuname.setError("username is required");
             etpass.requestFocus();
             return;
         }
@@ -102,52 +121,89 @@ public class Login extends AppCompatActivity implements OnClickListener {
         }
 
 
-        progressBar = findViewById(R.id.progress_bar);
+        progressDialog = new ProgressDialog(Login.this, R.style.CustomDialog);
+        progressDialog.setMessage("Logging you in, Please wait ...");
+        progressDialog.setCancelable(true);
+        progressDialog.show();
+        progressDialog.setCanceledOnTouchOutside(false);
 
-//        progressBar = new ProgressBar(Login.this);
-        progressBar.setVisibility(View.VISIBLE);
 
-        Call <ResponseBody> call = RetrofitClient.getInstance()
+        Call<LoginResponse> call = RetrofitClient.getInstance()
                 .getApi()
                 .userLogin(username, password);
-
-        call.enqueue(new Callback<ResponseBody>() {
+        call.enqueue(new Callback<LoginResponse>() {
             @Override
-            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+            public void onResponse(Call<LoginResponse> call, Response<LoginResponse> response) {
 
-                String s;
+                String s = null;
+                LoginResponse loginResponse = response.body();
 
-                if (response.isSuccessful()){
-//                    s = response.body().toString();
-//                    Toast.makeText(Login.this, "login successful", Toast.LENGTH_LONG).show();
-                    Toast.makeText(Login.this, "Welcome back!", Toast.LENGTH_LONG).show();
-                    progressBar.setVisibility(View.INVISIBLE);
+                if (response.isSuccessful()) {
+                    assert loginResponse != null;
+                   SharedPrefManager.getInstance(getApplicationContext())
+                            .saveDonor(loginResponse.getDonor());
+                    Donor donor = SharedPrefManager.getInstance(getApplicationContext()).getDonor();
+                    Toast.makeText(Login.this, "Welcome " + donor.getFirst_name() + "!", Toast.LENGTH_LONG).show();
+
+                    if (response.body() != null) {
+                        Log.d("Login: ", loginResponse.getMessage());
+                    }
+
+                    progressDialog.dismiss();
+
                     Intent intent = new Intent(Login.this, UserProfile.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                     startActivity(intent);
+
+
 
                 }
 
-                else
-//                    s =response.body().toString();
-                    Toast.makeText(Login.this, "please check your password or username. \\nUSERNAME is case sensitive", Toast.LENGTH_LONG).show();
-                    progressBar.setVisibility(View.INVISIBLE);
+                else  {
 
-//                if(s != null)
-//                   Toast.makeText(Login.this, "please check your password or username. \nUSERNAME is case sensitive", Toast.LENGTH_LONG).show();
+                    if (response.errorBody() != null) {
+                        try {
+                            s = response.errorBody().string();
+
+                            JSONObject jsonObject = new JSONObject(s);
+
+                            Toast.makeText(Login.this, jsonObject.getString("message"), Toast.LENGTH_LONG).show();
+
+                            Log.e("Login error", s);
+
+                            progressDialog.dismiss();
+                        } catch (IOException e) {
+
+                            Toast.makeText(Login.this, "Something went wrong, please try again", Toast.LENGTH_LONG).show();
+
+                            Log.e("IOException", e.toString());
+                            progressDialog.dismiss();
+                            e.printStackTrace();
+                        } catch (JSONException e) {
+                            Toast.makeText(Login.this, "Something went wrong, please try again", Toast.LENGTH_LONG).show();
+
+                            Log.e("JSONException", e.toString());
+
+                            progressDialog.dismiss();
+                            e.printStackTrace();
+                        }
 
 
+                    }
 
+
+                }
             }
+
 
             @Override
-            public void onFailure(Call<ResponseBody> call, Throwable t) {
+            public void onFailure(Call<LoginResponse> call, Throwable t) {
+                    progressDialog.dismiss();
+                Toast.makeText(Login.this, "failed to connect. \ncheck your internet connection or try again", Toast.LENGTH_LONG).show();
 
-                Toast.makeText(Login.this, t.getMessage(), Toast.LENGTH_LONG).show();
-                progressBar.setVisibility(View.INVISIBLE);
-
-
-            }
-        });
+                Log.e("Login error: ", t.getMessage());
+    }
+});
 
 
     }
@@ -185,8 +241,7 @@ public class Login extends AppCompatActivity implements OnClickListener {
             case R.id.instagram:
                 webpage = Uri.parse(getString(R.string.instagram_url));
                 intent =new  Intent(Intent.ACTION_VIEW, webpage);
-                packageManager = getPackageManager();
-                activities = packageManager.queryIntentActivities(intent, 0);
+                activities = getPackageManager().queryIntentActivities(intent, 0);
                 isIntentSafe = activities.size() > 0;
 
                 if (isIntentSafe){
@@ -200,8 +255,7 @@ public class Login extends AppCompatActivity implements OnClickListener {
             case R.id.facebook:
                 webpage = Uri.parse("https://www.facebook.com/rube.bichage");
                 intent = new Intent(Intent.ACTION_VIEW, webpage);
-                packageManager = getPackageManager();
-                activities = packageManager.queryIntentActivities(intent, 0);
+                activities = getPackageManager().queryIntentActivities(intent, 0);
                 isIntentSafe = activities.size() > 0;
 
                 if (isIntentSafe){
@@ -217,28 +271,20 @@ public class Login extends AppCompatActivity implements OnClickListener {
                 userLogin();
                 break;
         }
+
     }
 
 
     @Override
 
     public void onBackPressed(){
+        super.onBackPressed();
         finish();
     }
 
-    protected boolean isOnline() {
-        ConnectivityManager cm = (ConnectivityManager)getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo netInfo = cm.getActiveNetworkInfo();
-        return netInfo != null && netInfo.isConnectedOrConnecting();
-    }
 
-    public void checkConnection(){
-        if(isOnline()){
-            Toast.makeText(getApplicationContext(), "You are connected to Internet", Toast.LENGTH_SHORT).show();
-        }else{
-            Toast.makeText(getApplicationContext(), "You are not connected to Internet", Toast.LENGTH_SHORT).show();
-        }
-    }
+
+
 
 
 

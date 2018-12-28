@@ -1,17 +1,16 @@
 package activities;
 
+import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
-import android.content.Context;
+import android.app.ProgressDialog;
 import android.content.Intent;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.util.Patterns;
 import android.view.View;
 import android.widget.DatePicker;
 import android.widget.EditText;
-import android.widget.ProgressBar;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.example.reuben.donatebloodkenya.R;
@@ -20,23 +19,23 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Locale;
 
+import api.RetrofitClient;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import models.DefaultApiResponse;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import services.RetrofitClient;
 
 public class Register extends AppCompatActivity implements View.OnClickListener{
 
-   private EditText etUname, etFirstName, etLastname, etEmail, etPassword, birth_date;
-   private ProgressBar progressBar;
-   Calendar myCalendar;
-   private int mYear, mMonth, mDay, mHour, mMinute;
-
+    private EditText etUname, etFirstName, etLastname, etEmail, etPassword, birth_date;
+    Spinner county_spinner, gender_spinner;
+    ProgressDialog progressDialog;
+    Toolbar toolbar;
 
 
 
@@ -45,12 +44,7 @@ public class Register extends AppCompatActivity implements View.OnClickListener{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
 
-
-
-
-
-
-
+        setupActionBar();
 
 
 
@@ -61,19 +55,17 @@ public class Register extends AppCompatActivity implements View.OnClickListener{
         etPassword = findViewById(R.id.etpassword);
         birth_date = findViewById(R.id.birthdate);
 
-
-
-
+        county_spinner = findViewById(R.id.county_spinner);
+        gender_spinner = findViewById(R.id.gender_spinner);
 
         findViewById(R.id.bregister).setOnClickListener(this);
 
         findViewById(R.id.birthdate).setOnClickListener(this);
 
 
-        findViewById(R.id.tvLogin).setOnClickListener(this);
+
+
     }
-
-
 
 
 
@@ -85,18 +77,16 @@ public class Register extends AppCompatActivity implements View.OnClickListener{
                 userSignUp();
 
                 break;
-            case R.id.tvLogin:
-                Intent intent = new Intent(this, Login.class);
-                startActivity(intent);
-                break;
+
             case R.id.birthdate:
                 final Calendar c = Calendar.getInstance();
-                mYear = c.get(Calendar.YEAR);
-                mMonth = c.get(Calendar.MONTH);
-                mDay = c.get(Calendar.DAY_OF_MONTH);
+                int mYear = c.get(Calendar.YEAR);
+                int mMonth = c.get(Calendar.MONTH);
+                int mDay = c.get(Calendar.DAY_OF_MONTH);
                 DatePickerDialog datePickerDialog = new DatePickerDialog(this,
                         new DatePickerDialog.OnDateSetListener() {
 
+                            @SuppressLint("SetTextI18n")
                             @Override
                             public void onDateSet(DatePicker view, int year,
                                                   int monthOfYear, int dayOfMonth) {
@@ -109,15 +99,13 @@ public class Register extends AppCompatActivity implements View.OnClickListener{
                 break;
 
 
-        }
 
+        }
 
 
     }
 
     private void userSignUp() {
-
-
 
 
         String username = etUname.getText().toString().trim();
@@ -167,6 +155,23 @@ public class Register extends AppCompatActivity implements View.OnClickListener{
             }
 
 
+        String county_name = county_spinner.getSelectedItem().toString();
+            if (county_spinner.getSelectedItem().toString().equalsIgnoreCase("Choose County")){
+                Toast.makeText(Register.this, "please choose county", Toast.LENGTH_LONG).show();
+                county_spinner.requestFocus();
+                return;
+
+            }
+
+         String gender = gender_spinner.getSelectedItem().toString();
+            if (gender_spinner.getSelectedItem().toString().equalsIgnoreCase("Choose gender")){
+                Toast.makeText(Register.this, "Please choose gender", Toast.LENGTH_LONG).show();
+                gender_spinner.requestFocus();
+                return;
+            }
+
+
+
 
         String password = etPassword.getText().toString().trim();
             if (password.isEmpty()){
@@ -176,7 +181,7 @@ public class Register extends AppCompatActivity implements View.OnClickListener{
             }
 
             if (password.length() <8 ){
-                etPassword.setError("This password is too short");
+                etPassword.setError("the password should at least be 8 characters long");
                 etPassword.requestFocus();
                 return;
 
@@ -185,62 +190,96 @@ public class Register extends AppCompatActivity implements View.OnClickListener{
 
 
 
-        progressBar = findViewById(R.id.progressBar);
-            progressBar.setVisibility(View.VISIBLE);
 
-        Call <ResponseBody> call = RetrofitClient.getInstance()
+        progressDialog = new ProgressDialog(Register.this, R.style.CustomDialog);
+        progressDialog.setMessage("loading, please wait ...");
+        progressDialog.setCancelable(true);
+        progressDialog.show();
+
+        Call <DefaultApiResponse> call = RetrofitClient.getInstance()
                 .getApi()
-                .createUser(username, first_name, last_name, email, birthdate, password);
+                .createUser(username, first_name, last_name, email, birthdate, county_name, gender, password);
 
-            call.enqueue(new Callback<ResponseBody>() {
+            call.enqueue(new Callback<DefaultApiResponse>() {
                 @Override
-                public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                public void onResponse(Call<DefaultApiResponse> call, Response<DefaultApiResponse> response) {
                     String s = null;
 
                     if (response.code() == 200){
                         if (response.body() != null) {
                             s = response.body().toString();
 
-                            progressBar.setVisibility(View.INVISIBLE);
+//                            progressBar.setVisibility(View.INVISIBLE);
+
+                            progressDialog.dismiss();
                             Toast.makeText(Register.this, "account created successfully", Toast.LENGTH_LONG).show();
-
-
                             Intent intent = new Intent(Register.this, Login.class);
                             startActivity(intent);
                         }
-                        else {
-
-                            try {
-                                assert response.errorBody() != null;
-                                s = response.errorBody().string();
-                                progressBar.setVisibility(View.INVISIBLE);
-                            } catch (IOException e) {
-                                e.printStackTrace();
-                            }
-
-                        }
-
 
 
                     }
 
-                    if (s !=null){
+                     if (response.code() == 400){
                         try {
-                            JSONObject jsonObject = new JSONObject(s);
-                            progressBar.setVisibility(View.INVISIBLE);
-                            Toast.makeText(Register.this, jsonObject.getString("error"), Toast.LENGTH_LONG).show();
+                            if (response.errorBody() != null) {
+                                s = response.errorBody().string();
+
+                                JSONObject jsonObject = new JSONObject(s);
+                                Toast.makeText(Register.this,jsonObject.getString("message"), Toast.LENGTH_LONG).show();
+                                    etUname.setError("check your username");
+                                    etUname.requestFocus();
+
+                                Log.e("Register error", s);
+                                progressDialog.dismiss();
+
+
+                            }
+                        } catch (IOException e) {
+                            e.printStackTrace();
                         } catch (JSONException e) {
                             e.printStackTrace();
+                            progressDialog.dismiss();
                         }
 
+
                     }
+
+                    if (response.code() == 406){
+                        try {
+                            if (response.errorBody() != null) {
+                                s = response.errorBody().string();
+
+                                JSONObject jsonObject = new JSONObject(s);
+                                Toast.makeText(Register.this,jsonObject.getString("message"), Toast.LENGTH_LONG).show();
+                                etEmail.setError("check your email");
+                                etEmail.requestFocus();
+
+                                Log.e("Register error", s);
+                                progressDialog.dismiss();
+
+
+                            }
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            progressDialog.dismiss();
+                        }
+
+
+                    }
+
 
                 }
 
                 @Override
-                public void onFailure(Call<ResponseBody> call, Throwable t) {
+                public void onFailure(Call<DefaultApiResponse> call, Throwable t) {
+//                    progressBar.setVisibility(View.INVISIBLE);
+                        progressDialog.dismiss();
+                    Toast.makeText(Register.this, "Unable to connect, please check your internet connection", Toast.LENGTH_LONG).show();
 
-                    Toast.makeText(Register.this, t.getMessage(), Toast.LENGTH_LONG).show();
+
 
                 }
             });
@@ -249,11 +288,25 @@ public class Register extends AppCompatActivity implements View.OnClickListener{
 
     @Override
     public void onBackPressed() {
-
+        super.onBackPressed();
         finish();
 
     }
+    public void setupActionBar(){
+        toolbar = findViewById(R.id.register_toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar();
+        setTitle("Register");
 
+        toolbar.setNavigationIcon(R.drawable.ic_arrow_back);
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
+            }
+        });
+
+    }
 
 
 

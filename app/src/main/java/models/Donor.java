@@ -1,133 +1,103 @@
 package models;
 
-import com.google.gson.annotations.Expose;
-import com.google.gson.annotations.SerializedName;
-
 public class Donor {
-    public Integer getId() {
-        return id;
+
+    private  Integer id;
+    private String username;
+
+    private String email;
+    private String first_name;
+
+    private String token;
+
+    private String last_name;
+
+    private String birthdate;
+
+    private String county_name;
+
+    private String image;
+
+    private String blood_group;
+
+    public Integer getAge() {
+        return age;
     }
 
-    public Donor(Integer id, String username, String token, String firstName, String lastName, Integer gender, Object phoneNumber, Object birthdate, String email, Object imageUrl) {
+    public void setAge(Integer age) {
+        this.age = age;
+    }
+
+    private Integer age;
+
+    public Donor(Integer id, String username, String email, String first_name, String token, String last_name, String birthdate, Integer age, String county_name, String image, String blood_group, String phone_number, String date_donated) {
         this.id = id;
         this.username = username;
-        this.token = token;
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.gender = gender;
-        this.phoneNumber = phoneNumber;
-        this.birthdate = birthdate;
         this.email = email;
-        this.imageUrl = imageUrl;
+        this.first_name = first_name;
+        this.token = token;
+        this.last_name = last_name;
+        this.birthdate = birthdate;
+        this.age = age;
+        this.county_name = county_name;
+        this.image = image;
+        this.blood_group = blood_group;
+        this.phone_number = phone_number;
+        this.date_donated = date_donated;
     }
 
-    public void setId(Integer id) {
-        this.id = id;
+
+    public Integer getId() {
+        return id;
     }
 
     public String getUsername() {
         return username;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
+    public String getEmail() {
+        return email;
+    }
+
+    public String getFirst_name() {
+        return first_name;
     }
 
     public String getToken() {
         return token;
     }
 
-    public void setToken(String token) {
-        this.token = token;
+    public String getLast_name() {
+        return last_name;
     }
 
-    public String getFirstName() {
-        return firstName;
-    }
-
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
-
-    public Integer getGender() {
-        return gender;
-    }
-
-    public void setGender(Integer gender) {
-        this.gender = gender;
-    }
-
-    public Object getPhoneNumber() {
-        return phoneNumber;
-    }
-
-    public void setPhoneNumber(Object phoneNumber) {
-        this.phoneNumber = phoneNumber;
-    }
-
-    public Object getBirthdate() {
+    public String getBirthdate() {
         return birthdate;
     }
 
-    public void setBirthdate(Object birthdate) {
-        this.birthdate = birthdate;
+    public String getCounty_name() {
+        return county_name;
     }
 
-    public String getEmail() {
-        return email;
+
+    public String getPhone_number() {
+        return phone_number;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
+    public String getDate_donated() {
+        return date_donated;
     }
 
-    public Object getImageUrl() {
-        return imageUrl;
+    private String phone_number;
+
+    private String date_donated;
+
+
+    public String getImage() {
+        return image;
     }
 
-    public void setImageUrl(Object imageUrl) {
-        this.imageUrl = imageUrl;
+    public String getBlood_group() {
+        return blood_group;
     }
-
-    @SerializedName("id")
-    @Expose
-    private Integer id;
-    @SerializedName("username")
-    @Expose
-    private String username;
-    @SerializedName("token")
-    @Expose
-    private String token;
-    @SerializedName("first_name")
-    @Expose
-    private String firstName;
-    @SerializedName("last_name")
-    @Expose
-    private String lastName;
-    @SerializedName("gender")
-    @Expose
-    private Integer gender;
-    @SerializedName("phone_number")
-    @Expose
-    private Object phoneNumber;
-    @SerializedName("birthdate")
-    @Expose
-    private Object birthdate;
-    @SerializedName("email")
-    @Expose
-    private String email;
-    @SerializedName("image_url")
-    @Expose
-    private Object imageUrl;
-
-
-
 }

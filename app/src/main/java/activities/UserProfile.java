@@ -1,14 +1,6 @@
 package activities;
 
 import android.content.Intent;
-import android.support.annotation.NonNull;
-import android.support.design.internal.NavigationMenu;
-import android.support.design.widget.BottomNavigationView;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.NavigationView;
-import android.support.design.widget.Snackbar;
-import android.support.v4.app.Fragment;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -16,53 +8,136 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.example.reuben.donatebloodkenya.R;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.mikepenz.materialdrawer.Drawer;
+import com.mikepenz.materialdrawer.DrawerBuilder;
+import com.mikepenz.materialdrawer.model.DividerDrawerItem;
+import com.mikepenz.materialdrawer.model.PrimaryDrawerItem;
+import com.mikepenz.materialdrawer.model.SecondaryDrawerItem;
+import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 
 import java.util.Objects;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 import fragments.EventsFragment;
 import fragments.MeFragment;
 import fragments.NewsFragment;
+import fragments.SettingsFragment;
+import storage.SharedPrefManager;
 
 public class UserProfile extends AppCompatActivity implements BottomNavigationView.OnNavigationItemSelectedListener {
-    FloatingActionButton floatingActionButton;
     BottomNavigationView navigationView;
+    androidx.appcompat.widget.Toolbar toolbar;
 
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.app_menu, menu);
-        return true;
-    }
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.user_profile);
 
-    navigationView = findViewById(R.id.nav_view);
+         toolbar = findViewById(R.id.profile_toolbar);
+            setSupportActionBar(toolbar);
+            getSupportActionBar();
+            setTitle("About Me");
 
-    navigationView.setOnNavigationItemSelectedListener(this);
 
-    displayFragment(new  MeFragment());
+        new DrawerBuilder().withActivity(this).build();
 
-    floatingActionButton = findViewById(R.id.fab_book);
+        PrimaryDrawerItem home = new PrimaryDrawerItem().withIdentifier(1).withIcon(R.drawable.ic_home).withName(R.string.drawer_home);
+        PrimaryDrawerItem profile = new PrimaryDrawerItem().withIdentifier(2).withIcon(R.drawable.ic_person_black).withName(R.string.drawer_profile);
+        final PrimaryDrawerItem settings = new PrimaryDrawerItem().withIdentifier(3).withIcon(R.drawable.ic_settings).withName(R.string.drawer_settings);
+        final PrimaryDrawerItem logout = new PrimaryDrawerItem().withIdentifier(4).withIcon(R.drawable.logout).withName(R.string.drawer_logout);
 
-    floatingActionButton.setOnClickListener(new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            Toast.makeText(UserProfile.this, "TODO: Implement fab", Snackbar.LENGTH_LONG).show();
-        }
-    });
+        SecondaryDrawerItem contact = new SecondaryDrawerItem().withIdentifier(5).withIcon(R.drawable.ic_contact_us).withName(R.string.drawer_contact);
+        final SecondaryDrawerItem about = new SecondaryDrawerItem().withIdentifier(6).withIcon(R.drawable.ic_info_outline_black_24dp).withName(R.string.drawer_about);
+
+
+        new DrawerBuilder()
+                .withActivity(this)
+                .withToolbar(toolbar)
+                .withSliderBackgroundColorRes(R.color.material_drawer_background)
+                .addDrawerItems(
+                        home, profile, settings, logout,
+                        new DividerDrawerItem(),
+                        contact, about
+                )
+                .withOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener() {
+
+                    @Override
+                    public boolean onItemClick(View view, int position, IDrawerItem drawerItem) {
+
+
+                        if (drawerItem.equals(4)) {
+                            SharedPrefManager.getInstance(getApplicationContext()).clear();
+                            Intent intent = new Intent(getApplicationContext(), Login.class);
+                            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                            startActivity(intent);
+                        }
+
+                        if (drawerItem.equals(6)) {
+                            Intent intent = new Intent(getApplicationContext(), About.class);
+                            startActivity(intent);
+                        }
+                        if (drawerItem.equals(4)) {
+                            Fragment settings = new SettingsFragment();
+                            getSupportFragmentManager().beginTransaction()
+                                    .replace(R.id.user_container, settings, "Settings")
+                                    .addToBackStack(null)
+                                    .commit();
+
+                        }
+
+
+                        return false;
+                    }
+                })
+                .build();
+
+
+
+
+
+
+
+        navigationView = findViewById(R.id.nav_view);
+
+
+        navigationView.setOnNavigationItemSelectedListener(this);
+            displayFragment(new MeFragment());
+
+
 
     }
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        if (!SharedPrefManager.getInstance(this).isLoggedIn()){
+            Intent intent = new Intent(UserProfile.this, Login.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            startActivity(intent);
+        }
+    }
+
+
 
     public void displayFragment(Fragment fragment){
         getSupportFragmentManager()
                 .beginTransaction()
-                .replace(R.id.user_container, fragment).
-                commit();
+                .replace(R.id.user_container, fragment)
+                .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
+                .commit();
 
 
 
     }
+
+
 
 
     @Override
@@ -88,6 +163,11 @@ public class UserProfile extends AppCompatActivity implements BottomNavigationVi
                 fragment = new EventsFragment();
                 title = "Events";
                 break;
+            case  R.id.nav_settings:
+                fragment = new SettingsFragment();
+                title = "Settings";
+                break;
+
         }
 
         if (fragment !=null){
@@ -96,9 +176,14 @@ public class UserProfile extends AppCompatActivity implements BottomNavigationVi
         }
 
 
-        return true;
+        return super.onOptionsItemSelected(menuItem);
     }
 
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        finish();
+    }
 
 
 }
