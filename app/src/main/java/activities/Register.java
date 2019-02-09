@@ -5,13 +5,15 @@ import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.util.Patterns;
 import android.view.View;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 import com.example.reuben.donatebloodkenya.R;
 
@@ -21,11 +23,8 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.util.Calendar;
 
-import api.RetrofitClient;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
+import api.RetrofitNoAuthClient;
 import models.DefaultApiResponse;
-import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -196,16 +195,16 @@ public class Register extends AppCompatActivity implements View.OnClickListener{
         progressDialog.setCancelable(true);
         progressDialog.show();
 
-        Call <DefaultApiResponse> call = RetrofitClient.getInstance()
+        Call <DefaultApiResponse> call = RetrofitNoAuthClient.getInstance()
                 .getApi()
                 .createUser(username, first_name, last_name, email, birthdate, county_name, gender, password);
 
             call.enqueue(new Callback<DefaultApiResponse>() {
                 @Override
                 public void onResponse(Call<DefaultApiResponse> call, Response<DefaultApiResponse> response) {
-                    String s = null;
+                    String s;
 
-                    if (response.code() == 200){
+                    if (response.isSuccessful()){
                         if (response.body() != null) {
                             s = response.body().toString();
 
@@ -217,48 +216,18 @@ public class Register extends AppCompatActivity implements View.OnClickListener{
                             startActivity(intent);
                         }
 
-
                     }
 
-                     if (response.code() == 400){
+                    else{
                         try {
                             if (response.errorBody() != null) {
                                 s = response.errorBody().string();
 
                                 JSONObject jsonObject = new JSONObject(s);
-                                Toast.makeText(Register.this,jsonObject.getString("message"), Toast.LENGTH_LONG).show();
-                                    etUname.setError("check your username");
-                                    etUname.requestFocus();
 
-                                Log.e("Register error", s);
+                                Toast.makeText(Register.this, jsonObject.getString("username"), Toast.LENGTH_SHORT).show();
+                                Toast.makeText(Register.this, jsonObject.getString("email"), Toast.LENGTH_SHORT).show();
                                 progressDialog.dismiss();
-
-
-                            }
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                            progressDialog.dismiss();
-                        }
-
-
-                    }
-
-                    if (response.code() == 406){
-                        try {
-                            if (response.errorBody() != null) {
-                                s = response.errorBody().string();
-
-                                JSONObject jsonObject = new JSONObject(s);
-                                Toast.makeText(Register.this,jsonObject.getString("message"), Toast.LENGTH_LONG).show();
-                                etEmail.setError("check your email");
-                                etEmail.requestFocus();
-
-                                Log.e("Register error", s);
-                                progressDialog.dismiss();
-
-
                             }
                         } catch (IOException e) {
                             e.printStackTrace();

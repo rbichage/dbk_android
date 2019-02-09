@@ -1,36 +1,26 @@
 package api;
 
-
-import android.util.Base64;
-
 import java.util.concurrent.TimeUnit;
 
-import auth.AuthenticationInterceptor;
+import auth.NoAuthInterceptor;
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.converter.scalars.ScalarsConverterFactory;
 
+public class RetrofitNoAuthClient {
 
-/*
- * A singleton class that defines a  RetrofitClient
- */
-
-public class RetrofitClient {
-
-    private static final String AUTH_HEADER = "Basic " + Base64.encodeToString(("reuben:admin").getBytes(), Base64.NO_WRAP);
-//    private static final String BASE_URL ="https://dbke.herokuapp.com/api/v1/";
+    //    private static final String BASE_URL ="https://dbke.herokuapp.com/api/v1/";
     private  static  final String BASE_URL = "http://10.0.2.2:8000/api/v1/";
 //      private static final String BASE_URL = "http://192.168.43.65:8000/api/v1/";
 
-    private String authHeader;
 
-    private static RetrofitClient retrofitInstance;
+    private static RetrofitNoAuthClient retrofitInstance;
     private static Retrofit retrofit;
 
 
-    private  RetrofitClient() {
+    private  RetrofitNoAuthClient() {
 
 
         HttpLoggingInterceptor httpLoggingInterceptor = new HttpLoggingInterceptor();
@@ -42,11 +32,11 @@ public class RetrofitClient {
                 .writeTimeout(10, TimeUnit.SECONDS)
                 .readTimeout(30, TimeUnit.SECONDS)
                 .addInterceptor(
-                       new AuthenticationInterceptor(authHeader)
+                        new NoAuthInterceptor()
                 )
 
-                 .addInterceptor(httpLoggingInterceptor)
-                 .build();
+                .addInterceptor(httpLoggingInterceptor)
+                .build();
         retrofit = new Retrofit.Builder()
                 .baseUrl(BASE_URL)
                 .addConverterFactory(ScalarsConverterFactory.create())
@@ -59,9 +49,9 @@ public class RetrofitClient {
     /*A synchronous  method that gets Singleton instance of RetrofitClient
        since only one instance is required*/
 
-    public static synchronized RetrofitClient getInstance(){
+    public static synchronized RetrofitNoAuthClient getInstance(){
         if (retrofitInstance == null){                      // if instance is not yet created
-            retrofitInstance = new RetrofitClient();
+            retrofitInstance = new RetrofitNoAuthClient();
 
         }
         return retrofitInstance;
@@ -73,3 +63,5 @@ public class RetrofitClient {
         return retrofit.create(ApiClient.class);
     }
 }
+
+

@@ -79,9 +79,8 @@ public interface ApiClient {
     Call <LoginResponse> updateBloodType(
             @Path("id") int id,
             @Field("blood_group")String blood_group
-
-
     );
+
 
 
 

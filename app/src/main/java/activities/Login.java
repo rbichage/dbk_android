@@ -7,6 +7,7 @@ import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -27,6 +28,7 @@ import java.io.IOException;
 import java.util.List;
 
 import api.RetrofitClient;
+import models.AuthHeader;
 import models.Donor;
 import models.LoginResponse;
 import retrofit2.Call;
@@ -127,6 +129,11 @@ public class Login extends Activity implements OnClickListener {
         progressDialog.show();
         progressDialog.setCanceledOnTouchOutside(false);
 
+        String auth = Base64.encodeToString((username +":"+ password).getBytes(), Base64.NO_WRAP);
+        AuthHeader authHeader = new AuthHeader(auth);
+        SharedPrefManager.getInstance(getApplicationContext()).saveAuthHeader(authHeader);
+
+
 
         Call<LoginResponse> call = RetrofitClient.getInstance()
                 .getApi()
@@ -168,7 +175,7 @@ public class Login extends Activity implements OnClickListener {
 
                             JSONObject jsonObject = new JSONObject(s);
 
-                            Toast.makeText(Login.this, jsonObject.getString("message"), Toast.LENGTH_LONG).show();
+                            Toast.makeText(Login.this, jsonObject.getString("detail"), Toast.LENGTH_LONG).show();
 
                             Log.e("Login error", s);
 

@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+import models.AuthHeader;
 import models.Donor;
 
 public class SharedPrefManager {
@@ -91,5 +92,21 @@ public class SharedPrefManager {
         SharedPreferences.Editor editor = sharedPreferences.edit();
 
         editor.apply();
+    }
+
+    public void saveAuthHeader(AuthHeader authHeader){
+        SharedPreferences sharedPreferences = context.getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString("auth", authHeader.getAuthHeader());
+        editor.apply();
+    }
+
+    public AuthHeader getAuthHeader(){
+        SharedPreferences sharedPreferences = context.getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE);
+
+        return new AuthHeader(
+                sharedPreferences.getString("auth", null)
+        );
+
     }
 }

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.mikepenz.materialize.view.ScrimInsetsRelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -7,167 +7,172 @@
     android:background="@drawable/gradient"
     tools:context="activities.Login">
 
-    <ScrollView
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_alignParentStart="true"
+        android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
+        android:layout_marginTop="48dp"
         tools:ignore="UselessParent">
 
-        <RelativeLayout
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="96dp"
+            android:layout_height="96dp"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="20dp"
+            android:contentDescription="@string/app_name"
+            android:layout_marginBottom="16dp"
+            android:src="@drawable/ic_launcher" />
+
+        <TextView
+            android:id="@+id/login_text"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:textSize="24sp"
+            android:text="DonateBloodKenya"
+            android:textAlignment="center"
+            android:textStyle="bold"
+            android:layout_below="@id/imageView"
+            android:layout_marginBottom="24dp"
+            android:textColor="@color/md_black_1000"
+            />
 
 
-            <androidx.cardview.widget.CardView
-                android:id="@+id/login_card"
+
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/login_card"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
+            android:layout_marginBottom="20dp"
+            android:layout_centerInParent="true"
+            android:backgroundTint="#00FFFFFF"
+            android:layout_below="@id/login_text"
+            app:cardCornerRadius="6dp">
+
+            <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
-                android:layout_centerInParent="true"
-                android:layout_marginTop="80dp"
-                android:layout_marginBottom="20dp"
-                android:layout_marginEnd="10dp"
-                android:backgroundTint="#00FFFFFF"
-                app:cardCornerRadius="6dp">
+                android:layout_height="wrap_content">
 
-                <RelativeLayout
+
+                <androidx.appcompat.widget.AppCompatEditText
+                    android:id="@+id/username"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="40dp"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginTop="48dp"
+                    android:layout_marginEnd="40dp"
+                    android:background="@drawable/edit_shape"
+                    android:hint="@string/username"
+                    android:inputType="textPersonName"
+                    android:padding="10dp"
+                    tools:ignore="Autofill" />
 
-                    <ImageView
-                        android:id="@+id/imageView"
-                        android:layout_width="90dp"
-                        android:layout_height="90dp"
-                        android:layout_alignParentTop="true"
-                        android:layout_centerHorizontal="true"
-                        android:layout_marginTop="20dp"
-                        android:src="@drawable/ic_launcher"
-                        android:contentDescription="@string/app_name" />
+                <androidx.appcompat.widget.AppCompatEditText
+                    android:id="@+id/et_password"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:layout_below="@+id/username"
+                    android:layout_alignStart="@+id/username"
+                    android:layout_alignEnd="@+id/username"
+                    android:layout_marginTop="20dp"
+                    android:background="@drawable/edit_shape"
+                    android:ems="10"
+                    android:hint="@string/password"
+                    android:inputType="textPassword"
+                    android:padding="10dp"
+                    tools:ignore="Autofill,RtlHardcoded" />
 
-                    <androidx.appcompat.widget.AppCompatEditText
-                        android:padding="10dp"
-                        android:id="@+id/username"
-                        android:layout_width="match_parent"
-                        android:layout_height="40dp"
-                        android:layout_below="@+id/imageView"
-                        android:layout_centerHorizontal="true"
-                        android:layout_marginStart="10dp"
-                        android:layout_marginTop="40dp"
-                        android:layout_marginEnd="40dp"
-                        android:background="@drawable/edit_shape"
-                        android:hint="@string/username"
-                        android:inputType="textPersonName"
-                        tools:ignore="Autofill" />
-
-                    <androidx.appcompat.widget.AppCompatEditText
-                        android:padding="10dp"
-                        android:id="@+id/et_password"
-                        android:layout_width="match_parent"
-                        android:layout_height="40dp"
-                        android:layout_below="@+id/username"
-                        android:layout_alignStart="@+id/username"
-                        android:layout_alignEnd="@+id/username"
-                        android:layout_marginTop="20dp"
-                        android:background="@drawable/edit_shape"
-                        android:ems="10"
-                        android:hint="@string/password"
-                        android:inputType="textPassword"
-                        tools:ignore="Autofill,RtlHardcoded" />
-
-                    <Button
-                        android:textSize="15sp"
-                        android:id="@+id/blogin"
-                        android:layout_width="200dp"
-                        android:layout_height="40dp"
-                        android:layout_centerHorizontal="true"
-                        android:layout_marginTop="20dp"
-                        android:layout_below="@id/et_password"
-                        android:background="@drawable/button_shape"
-                        android:text="@string/login"
-                        android:textAlignment="center"
-                        android:textAllCaps="false"
-                        android:textColor="#1b1a1a" />
+                <Button
+                    android:id="@+id/blogin"
+                    android:layout_width="200dp"
+                    android:layout_height="40dp"
+                    android:layout_below="@id/et_password"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="20dp"
+                    android:background="@drawable/button_shape"
+                    android:text="@string/login"
+                    android:textAlignment="center"
+                    android:textAllCaps="false"
+                    android:textColor="#1b1a1a"
+                    android:textSize="15sp" />
 
 
-                    <androidx.appcompat.widget.AppCompatTextView
-                        android:id="@+id/tvReset"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_below="@+id/blogin"
-                        android:layout_centerHorizontal="true"
-                        android:layout_marginTop="18dp"
-                        android:textSize="15sp"
-                        android:text="@string/forgot_password"
-                        android:textStyle="bold" />
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/tvReset"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/blogin"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="18dp"
+                    android:text="@string/forgot_password"
+                    android:textSize="15sp"
+                    android:textStyle="bold" />
 
-                    <TextView
-                        android:id="@+id/tvRegister"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_below="@+id/tvReset"
-                        android:layout_centerHorizontal="true"
-                        android:layout_marginTop="18dp"
-                        android:layout_marginBottom="18dp"
-                        android:textSize="15sp"
-                        android:text="@string/register_here"
-                        android:textStyle="bold" />
+                <TextView
+                    android:id="@+id/tvRegister"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/tvReset"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="18dp"
+                    android:layout_marginBottom="18dp"
+                    android:text="@string/register_here"
+                    android:textSize="15sp"
+                    android:textStyle="bold" />
 
-                </RelativeLayout>
+            </RelativeLayout>
 
 
-            </androidx.cardview.widget.CardView>
+        </androidx.cardview.widget.CardView>
 
-            <TextView
-                android:id="@+id/tv_connect"
-                android:layout_width="wrap_content"
+        <TextView
+            android:id="@+id/tv_connect"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/login_card"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="20dp"
+            android:text="Connect with us:"
+            android:textSize="15sp"
+            android:textStyle="bold" />
+
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:id="@+id/layout1"
+            android:layout_width="wrap_content"
+            android:layout_height="50dp"
+            android:layout_below="@id/tv_connect"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="20dp"
+
+            >
+
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/twitter"
+                android:layout_width="30dp"
                 android:layout_height="wrap_content"
-                android:text="Connect with us:"
-                android:layout_below="@+id/login_card"
-                android:layout_centerHorizontal="true"
-                android:textStyle="bold"
-                android:textSize="15sp"
-                android:layout_marginTop="20dp"
-                />
+                app:srcCompat="@drawable/twitter" />
 
-            <androidx.appcompat.widget.LinearLayoutCompat
-                android:id="@+id/layout1"
-                android:layout_marginBottom="20dp"
-                android:layout_width="wrap_content"
-                android:layout_height="50dp"
-                android:layout_centerHorizontal="true"
-                android:layout_below="@id/tv_connect"
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/instagram"
+                android:layout_width="30dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="15dp"
+                android:contentDescription="@string/app_name"
+                app:srcCompat="@drawable/instagram" />
 
-                >
-
-
-                <androidx.appcompat.widget.AppCompatImageView
-                    android:id="@+id/twitter"
-                    android:layout_width="30dp"
-                    android:layout_height="wrap_content"
-                    app:srcCompat="@drawable/twitter" />
-
-                <androidx.appcompat.widget.AppCompatImageView
-                    android:id="@+id/instagram"
-                    android:layout_width="30dp"
-                    android:layout_height="wrap_content"
-                    app:srcCompat="@drawable/instagram"
-                    android:layout_marginStart="15dp"
-                    android:contentDescription="@string/app_name" />
-
-                <androidx.appcompat.widget.AppCompatImageView
-                    android:id="@+id/facebook"
-                    android:layout_width="30dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="15dp"
-                    app:srcCompat="@drawable/facebook"
-                     />
-            </androidx.appcompat.widget.LinearLayoutCompat>
-
-        </RelativeLayout>
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/facebook"
+                android:layout_width="30dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="15dp"
+                app:srcCompat="@drawable/facebook" />
+        </androidx.appcompat.widget.LinearLayoutCompat>
 
 
-    </ScrollView>
-
-
-</com.mikepenz.materialize.view.ScrimInsetsRelativeLayout>
+    </RelativeLayout>
+</ScrollView>
