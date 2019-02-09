@@ -25,10 +25,10 @@ public class EventsFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        Toolbar toolbar = view.findViewById(R.id.about_toolbar);
-        Objects.requireNonNull(getActivity()).setActionBar(toolbar);
-        getActivity().getActionBar();
-        getActivity().setTitle("Events");
+//        Toolbar toolbar = view.findViewById(R.id.about_toolbar);
+//        Objects.requireNonNull(getActivity()).setActionBar(toolbar);
+//        getActivity().getActionBar();
+//        getActivity().setTitle("Events");
     }
 }
 

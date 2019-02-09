@@ -16,6 +16,11 @@
         android:id="@+id/nav_events"
         android:title="@string/events"
         android:icon="@drawable/ic_events"/>
+    <item
+        android:id="@+id/nav_donors"
+        android:title="Donors"
+        android:icon="@drawable/ic_dnors"
+        />
 
     <item
         android:id="@+id/nav_settings"

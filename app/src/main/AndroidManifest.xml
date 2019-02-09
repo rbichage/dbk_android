@@ -33,6 +33,10 @@
             android:name="activities.UserProfile"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
+            android:name="com.yalantis.ucrop.UCropActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar"/>
+        <activity
             android:name="activities.Register"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity

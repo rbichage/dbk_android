@@ -22,6 +22,8 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
+
+import fragments.DonorsFragment;
 import fragments.EventsFragment;
 import fragments.MeFragment;
 import fragments.NewsFragment;
@@ -98,14 +100,7 @@ public class UserProfile extends AppCompatActivity implements BottomNavigationVi
                 })
                 .build();
 
-
-
-
-
-
-
         navigationView = findViewById(R.id.nav_view);
-
 
         navigationView.setOnNavigationItemSelectedListener(this);
             displayFragment(new MeFragment());
@@ -132,8 +127,6 @@ public class UserProfile extends AppCompatActivity implements BottomNavigationVi
                 .replace(R.id.user_container, fragment)
                 .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
                 .commit();
-
-
 
     }
 
@@ -167,6 +160,9 @@ public class UserProfile extends AppCompatActivity implements BottomNavigationVi
                 fragment = new SettingsFragment();
                 title = "Settings";
                 break;
+            case R.id.nav_donors:
+                fragment = new DonorsFragment();
+                title ="Donors";
 
         }
 

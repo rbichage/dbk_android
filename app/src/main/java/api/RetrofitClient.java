@@ -9,6 +9,7 @@ import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
+import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
@@ -19,7 +20,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class RetrofitClient {
 
-    private static final String AUTH_HEADER = "Basic " + Base64.encodeToString((":").getBytes(), Base64.NO_WRAP);
+    private static final String AUTH_HEADER = "Basic " + Base64.encodeToString(("reuben:admin").getBytes(), Base64.NO_WRAP);
 //    private static final String BASE_URL ="https://dbke.herokuapp.com/api/v1/";
     private  static  final String BASE_URL = "http://10.0.2.2:8000/api/v1/";
 //      private static final String BASE_URL = "http://192.168.43.65:8000/api/v1/";
@@ -34,9 +35,8 @@ public class RetrofitClient {
 
     private  RetrofitClient() {
 
-
-
-
+        HttpLoggingInterceptor httpLoggingInterceptor = new HttpLoggingInterceptor();
+        httpLoggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
 
 
          OkHttpClient okHttpClient = new OkHttpClient.Builder()
@@ -54,6 +54,7 @@ public class RetrofitClient {
                             }
                         }
                 )
+                 .addInterceptor(httpLoggingInterceptor)
                  .build();
         retrofit = new Retrofit.Builder()
                 .baseUrl(BASE_URL)

@@ -142,6 +142,7 @@ public class Login extends Activity implements OnClickListener {
                     assert loginResponse != null;
                    SharedPrefManager.getInstance(getApplicationContext())
                             .saveDonor(loginResponse.getDonor());
+
                     Donor donor = SharedPrefManager.getInstance(getApplicationContext()).getDonor();
                     Toast.makeText(Login.this, "Welcome " + donor.getFirst_name() + "!", Toast.LENGTH_LONG).show();
 
