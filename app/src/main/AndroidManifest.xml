@@ -20,40 +20,42 @@
         android:usesCleartextTraffic="true"
         tools:ignore="AllowBackup,GoogleAppIndexingWarning"
         tools:targetApi="m">
-        <activity
-            android:name="activities.UpdateProfile"
+        <activity android:name=".activities.UpdatePassword"
             android:theme="@style/AppTheme.NoActionBar">
 
         </activity>
         <activity
-            android:name="activities.About"
+            android:name=".activities.UpdateProfile"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
+        <activity
+            android:name=".activities.About"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
+            android:name=".activities.UserProfile"
             android:screenOrientation="portrait"
-            android:name="activities.UserProfile"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name="com.yalantis.ucrop.UCropActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar"/>
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
         <activity
-            android:name="activities.Register"
+            android:name=".activities.Register"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name="activities.Login"
+            android:name=".activities.Login"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-
         </activity>
         <activity
-            android:name="activities.ResetPassword"
+            android:name=".activities.ResetPassword"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name="activities.BookAppointment"
-            android:theme="@style/AppTheme.NoActionBar"/>
+        <activity
+            android:name=".activities.BookAppointment"
+            android:theme="@style/AppTheme.NoActionBar" />
     </application>
 
 </manifest>

@@ -140,6 +140,10 @@
     <string name="select_type">Select your blood type, leave blank if not sure.</string>
     <string name="phone_number">Phone Number</string>
     <string name="refresh">Refresh</string>
+    <string name="account">Account</string>
+    <string name="old_password">Old Password</string>
+    <string name="update_passowrd">Update Passowrd</string>
+    <string name="repeat_password">Repeat Password</string>
 
 
 </resources>

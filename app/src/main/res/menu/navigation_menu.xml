@@ -10,12 +10,8 @@
     <item
         android:id="@+id/nav_news"
         android:title="@string/news"
-        android:icon="@drawable/ic_content_paste_"/>
-
-    <item
-        android:id="@+id/nav_events"
-        android:title="@string/events"
         android:icon="@drawable/ic_events"/>
+
     <item
         android:id="@+id/nav_donors"
         android:title="Donors"
