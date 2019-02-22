@@ -20,13 +20,15 @@
         android:usesCleartextTraffic="true"
         tools:ignore="AllowBackup,GoogleAppIndexingWarning"
         tools:targetApi="m">
-        <activity android:name=".activities.UpdatePassword"
-            android:theme="@style/AppTheme.NoActionBar">
-
-        </activity>
+        <activity
+            android:name=".activities.BloodTypeActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".activities.UpdatePassword"
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".activities.UpdateProfile"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".activities.About"
             android:theme="@style/AppTheme.NoActionBar" />

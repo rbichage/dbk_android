@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    app:cardCornerRadius="4dp"
+    android:elevation="16dp"
+    android:padding="4dp"
+    app:cardPreventCornerOverlap="true"
+    android:layout_marginTop="8dp"
+    android:layout_marginStart="8dp"
+    android:layout_marginEnd="8dp"
+
+    >
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <TextView
+            android:id="@+id/tv_hospital_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Mombasa Hospital"
+            android:textSize="18sp"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginTop="8dp"
+            style="@style/TextAppearance.AppCompat.Title"
+            />
+
+        <TextView
+            android:id="@+id/tv_county_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tv_hospital_name"
+            android:layout_marginTop="8dp"
+            android:text="Mombasa County"
+            android:layout_alignStart="@id/tv_hospital_name"
+            android:layout_marginBottom="8dp"
+            />
+        <View
+            android:id="@+id/divider_view"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_below="@id/tv_county_name"
+            android:layout_marginBottom="4dp"
+            android:background="@color/md_white_1000"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            />
+        <TextView
+            android:id="@+id/tv_hospital_phone"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/divider_view"
+            android:text="+254721252125"
+            android:layout_marginBottom="8dp"
+            android:layout_alignStart="@id/tv_hospital_name"
+            android:layout_alignEnd="@id/tv_hospital_name"
+            />
+
+    </RelativeLayout>
+
+</androidx.cardview.widget.CardView>

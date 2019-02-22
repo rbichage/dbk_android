@@ -1,8 +1,12 @@
 package com.example.reuben.donatebloodkenya.api;
 
 import com.example.reuben.donatebloodkenya.models.DefaultApiResponse;
+import com.example.reuben.donatebloodkenya.models.Donor;
+import com.example.reuben.donatebloodkenya.models.Hospitals;
 import com.example.reuben.donatebloodkenya.models.LoginResponse;
 import com.example.reuben.donatebloodkenya.models.NewsResponse;
+
+import java.util.List;
 
 import okhttp3.ResponseBody;
 import retrofit2.Call;
@@ -79,6 +83,19 @@ public interface ApiClient {
             @Field("old_password") String old_password,
             @Field("new_password") String new_password
     );
+
+    @GET("donors/profile/{id}/")
+    Call<LoginResponse> getDonorDetails(@Path("id") int id);
+
+    @FormUrlEncoded
+    @POST("/appointments")
+    Call<ResponseBody> postAppointment();
+
+    @GET("hospitals/")
+    Call<List<Hospitals>> getHospitals();
+
+    @GET("donors/profile/")
+    Call<List<Donor>> getDonors();
 
 
 

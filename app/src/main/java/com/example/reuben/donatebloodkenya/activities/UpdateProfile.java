@@ -4,7 +4,6 @@ import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
 import android.os.Bundle;
-import android.util.Log;
 import android.util.Patterns;
 import android.view.View;
 import android.widget.DatePicker;
@@ -23,7 +22,6 @@ import com.example.reuben.donatebloodkenya.storage.SharedPrefManager;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.IOException;
 import java.util.Calendar;
 
 import retrofit2.Call;
@@ -39,8 +37,8 @@ public class UpdateProfile extends AppCompatActivity implements View.OnClickList
 
 
 
-    private EditText etphone, etfirst_name, etlast_name, etemail, birth_date, etcurrent_password, etnew_password;
-    private Spinner spinner_gender, spinner_county_name, spinner_blood_type;
+    private EditText etphone, etfirst_name, etlast_name, etemail, birth_date;
+    private Spinner spinner_gender, spinner_county_name;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,9 +50,7 @@ public class UpdateProfile extends AppCompatActivity implements View.OnClickList
 
         findViewById(R.id.update_button).setOnClickListener(this);
 
-        findViewById(R.id.update_password).setOnClickListener(this);
 
-        findViewById(R.id.b_type).setOnClickListener(this);
 
         etphone = findViewById(R.id.profile_phone);
         etfirst_name = findViewById(R.id.profile_first);
@@ -64,9 +60,6 @@ public class UpdateProfile extends AppCompatActivity implements View.OnClickList
         findViewById(R.id.profile_birthdate).setOnClickListener(this);
         spinner_gender = findViewById(R.id.profile_gender);
         spinner_county_name = findViewById(R.id.profile_county);
-        spinner_blood_type = findViewById(R.id.blood_type);
-        etcurrent_password = findViewById(R.id.current_password);
-        etnew_password = findViewById(R.id.new_password);
 
 
 
@@ -197,119 +190,7 @@ public class UpdateProfile extends AppCompatActivity implements View.OnClickList
 
     }
 
-    private  void updatePassword(){
-        String current_password = etcurrent_password.getText().toString().trim();
-            if(current_password.isEmpty()){
-                etcurrent_password.setError("This field is required");
-                etcurrent_password.requestFocus();
-                return;
-            }
 
-            if (current_password.length()<8){
-                etcurrent_password.setError("This password is too short");
-                etcurrent_password.requestFocus();
-                return;
-
-            }
-
-
-        String new_password = etnew_password.getText().toString().trim();
-
-        if(new_password.isEmpty()){
-            etnew_password.setError("This field is required");
-            etnew_password.requestFocus();
-            return;
-        }
-
-        if (new_password.length()<8){
-            etnew_password.setError("This password is too short");
-            etnew_password.requestFocus();
-            return;
-
-        }
-
-        Toast.makeText(UpdateProfile.this, "TODO//: implement call", Toast.LENGTH_LONG).show();
-    }
-
-    public void updateBloodType(){
-        String blood_group = spinner_blood_type.getSelectedItem().toString().trim();
-        if (spinner_blood_type.getSelectedItem().toString().trim().equalsIgnoreCase("Not Sure")){
-            Toast.makeText(UpdateProfile.this, "Choose a valid blood group", Toast.LENGTH_LONG).show();
-
-            return;
-        }
-
-
-        progressDialog = new ProgressDialog(UpdateProfile.this, R.style.CustomDialog);
-        progressDialog.setMessage("loading, please wait ...");
-        progressDialog.setCancelable(true);
-        progressDialog.show();
-
-        final Donor donor = SharedPrefManager.getInstance(getApplicationContext()).getDonor();
-
-
-        Call <LoginResponse> call = RetrofitClient.getInstance()
-                .getApi()
-                .updateBloodType(donor.getId(),blood_group);
-
-        call.enqueue(new Callback<LoginResponse>() {
-            @Override
-            public void onResponse(Call<LoginResponse> call, Response<LoginResponse> response) {
-
-                String s =null;
-
-                LoginResponse loginResponse = response.body();
-
-                if (response.isSuccessful()){
-                    assert loginResponse != null;
-                    s = loginResponse.getMessage();
-                    if (response.body() != null) {
-                        SharedPrefManager.getInstance(getApplicationContext()).saveDonor(response.body().getDonor());
-                    }
-                    Toast.makeText(UpdateProfile.this, s, Toast.LENGTH_LONG).show();
-
-                    if (response.body() != null) {
-                        Log.d("Update profile", response.body().toString());
-                    }
-                    progressDialog.dismiss();
-                }
-
-                else {
-                    try {
-
-                        if (response.errorBody() != null) {
-                            s = response.errorBody().string();
-                            JSONObject jsonObject = new JSONObject(s);
-                            Toast.makeText(UpdateProfile.this, jsonObject.getString("message"), Toast.LENGTH_LONG).show();
-
-                            Log.e("Update profile", s);
-                            progressDialog.dismiss();
-                        }
-
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                        progressDialog.dismiss();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                }
-
-
-
-
-
-            }
-
-            @Override
-            public void onFailure(Call<LoginResponse> call, Throwable t) {
-
-                progressDialog.dismiss();
-                Toast.makeText(UpdateProfile.this, "Unable to connect, check your settings", Toast.LENGTH_LONG).show();
-            }
-        });
-
-
-    }
 
 
     @Override
@@ -340,9 +221,7 @@ public class UpdateProfile extends AppCompatActivity implements View.OnClickList
                 updateProfile();
                 break;
 
-            case R.id.update_password:
-                updatePassword();
-                break;
+
 
             case R.id.profile_birthdate:
                 final Calendar calendar = Calendar.getInstance();
@@ -364,9 +243,6 @@ public class UpdateProfile extends AppCompatActivity implements View.OnClickList
                 datePickerDialog.show();
                 break;
 
-            case R.id.b_type:
-                updateBloodType();
-                break;
 
 
         }

@@ -192,7 +192,6 @@
                 android:layout_alignStart="@+id/tv_logout"
                 android:layout_below="@id/settings_view_1"
                 android:layout_marginBottom="16dp"
-
                 />
 
 

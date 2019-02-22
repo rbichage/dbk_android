@@ -1,8 +1,6 @@
 package com.example.reuben.donatebloodkenya.api;
 
 
-import android.util.Base64;
-
 import com.example.reuben.donatebloodkenya.auth.AuthenticationInterceptor;
 
 import java.util.concurrent.TimeUnit;
@@ -20,10 +18,9 @@ import retrofit2.converter.scalars.ScalarsConverterFactory;
 
 public class RetrofitClient {
 
-    private static final String AUTH_HEADER = "Basic " + Base64.encodeToString(("reuben:admin").getBytes(), Base64.NO_WRAP);
 //    private static final String BASE_URL ="https://dbke.herokuapp.com/api/v1/";
-//    private  static  final String BASE_URL = "http://10.0.2.2:8000/api/v1/";
-      private static final String BASE_URL = "http://192.168.100.18:8000/api/v1/";
+    private  static  final String BASE_URL = "http://10.0.2.2:8000/api/v1/";
+//      private static final String BASE_URL = "http://192.168.100.18:8000/api/v1/";
 
     private String authHeader;
 

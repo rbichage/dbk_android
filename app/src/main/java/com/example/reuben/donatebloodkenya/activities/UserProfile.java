@@ -11,6 +11,11 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.example.reuben.donatebloodkenya.R;
+import com.example.reuben.donatebloodkenya.fragments.DonorsFragment;
+import com.example.reuben.donatebloodkenya.fragments.MeFragment;
+import com.example.reuben.donatebloodkenya.fragments.NewsFragment;
+import com.example.reuben.donatebloodkenya.fragments.SettingsFragment;
+import com.example.reuben.donatebloodkenya.storage.SharedPrefManager;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.mikepenz.materialdrawer.Drawer;
 import com.mikepenz.materialdrawer.DrawerBuilder;
@@ -21,17 +26,9 @@ import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 
 import java.util.Objects;
 
-import com.example.reuben.donatebloodkenya.fragments.DonorsFragment;
-import com.example.reuben.donatebloodkenya.fragments.MeFragment;
-import com.example.reuben.donatebloodkenya.fragments.NewsFragment;
-import com.example.reuben.donatebloodkenya.fragments.SettingsFragment;
-import com.example.reuben.donatebloodkenya.storage.SharedPrefManager;
-
 public class UserProfile extends AppCompatActivity implements BottomNavigationView.OnNavigationItemSelectedListener {
     BottomNavigationView navigationView;
     androidx.appcompat.widget.Toolbar toolbar;
-
-
 
 
     @Override

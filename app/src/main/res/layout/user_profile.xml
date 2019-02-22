@@ -36,13 +36,14 @@
 
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
-        android:paddingTop="3dp"
-        android:elevation="20dp"
-        android:paddingBottom="1dp"
+        android:paddingTop="2dp"
+        android:elevation="16dp"
+        android:paddingBottom="2dp"
         android:layout_width="match_parent"
         android:id="@+id/nav_view"
         android:layout_height="45dp"
         android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
         app:menu="@menu/navigation_menu"
         app:itemIconTint="@color/primary_dark"
@@ -50,7 +51,6 @@
         android:background="@drawable/gradient"
         app:labelVisibilityMode="labeled"
 
-        >
-    </com.google.android.material.bottomnavigation.BottomNavigationView>
+        />
 
 </RelativeLayout>

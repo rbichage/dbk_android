@@ -1,8 +1,9 @@
 package com.example.reuben.donatebloodkenya.api;
 
+import com.example.reuben.donatebloodkenya.auth.NoAuthInterceptor;
+
 import java.util.concurrent.TimeUnit;
 
-import com.example.reuben.donatebloodkenya.auth.NoAuthInterceptor;
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
@@ -12,7 +13,7 @@ import retrofit2.converter.scalars.ScalarsConverterFactory;
 public class RetrofitNoAuthClient {
 
     //    private static final String BASE_URL ="https://dbke.herokuapp.com/api/v1/";
-    private  static  final String BASE_URL = "http://10.0.2.2:8000/com.example.reuben.donatebloodkenya.api/v1/";
+    private  static  final String BASE_URL = "http://10.0.2.2:8000/v1/";
 //      private static final String BASE_URL = "http://192.168.43.65:8000/api/v1/";
 
 

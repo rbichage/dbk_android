@@ -16,6 +16,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import com.example.reuben.donatebloodkenya.R;
+import com.example.reuben.donatebloodkenya.api.RetrofitNoAuthClient;
+import com.example.reuben.donatebloodkenya.models.DefaultApiResponse;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -23,8 +25,6 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.util.Calendar;
 
-import com.example.reuben.donatebloodkenya.api.RetrofitNoAuthClient;
-import com.example.reuben.donatebloodkenya.models.DefaultApiResponse;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -91,9 +91,9 @@ public class Register extends AppCompatActivity implements View.OnClickListener{
                                                   int monthOfYear, int dayOfMonth) {
 
                                 birth_date.setText(year + "-" + (monthOfYear + 1) + "-" + dayOfMonth);
-
-                            }
+                                                            }
                         }, mYear, mMonth, mDay);
+                datePickerDialog.getDatePicker().setMaxDate(System.currentTimeMillis());
                 datePickerDialog.show();
                 break;
 

@@ -23,13 +23,18 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.bumptech.glide.Glide;
 import com.example.reuben.donatebloodkenya.R;
-import com.yalantis.ucrop.UCrop;
-
 import com.example.reuben.donatebloodkenya.activities.BookAppointment;
 import com.example.reuben.donatebloodkenya.activities.UpdateProfile;
-import de.hdodenhof.circleimageview.CircleImageView;
+import com.example.reuben.donatebloodkenya.api.RetrofitClient;
 import com.example.reuben.donatebloodkenya.models.Donor;
+import com.example.reuben.donatebloodkenya.models.LoginResponse;
 import com.example.reuben.donatebloodkenya.storage.SharedPrefManager;
+import com.yalantis.ucrop.UCrop;
+
+import de.hdodenhof.circleimageview.CircleImageView;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 import static android.app.Activity.RESULT_OK;
 
@@ -38,6 +43,8 @@ public class MeFragment extends Fragment implements View.OnClickListener {
 
     private TextView name, county_name, age;
     public static final int GET_FROM_GALLERY = 3;
+    private String image_url;
+    CircleImageView imageView;
 
 
     @SuppressLint("SetTextI18n")
@@ -58,22 +65,16 @@ public class MeFragment extends Fragment implements View.OnClickListener {
         super.onViewCreated(view, savedInstanceState);
 
 
-
         Donor donor = SharedPrefManager.getInstance(getActivity()).getDonor();
-        String image_url = "http://10.0.2.2:8000" + donor.getImage();
+        image_url = "http://10.0.2.2:8000" + donor.getImage();
 
         name = view.findViewById(R.id.name);
         county_name = view.findViewById(R.id.county_name);
         age = view.findViewById(R.id.age);
-        CircleImageView imageView = view.findViewById(R.id.user_profile_photo);
+        imageView = view.findViewById(R.id.user_profile_photo);
 
 
-        Glide
-                .with(view.getContext())
-                .load(image_url)
-                .into(imageView)
-        ;
-
+        Glide.with(view.getContext()).load(image_url).into(imageView);
 
 
         imageView.setOnClickListener(this);
@@ -87,12 +88,39 @@ public class MeFragment extends Fragment implements View.OnClickListener {
             @Override
             public void onRefresh() {
                 Donor donor = SharedPrefManager.getInstance(getActivity()).getDonor();
+
+                int id = donor.getId();
+
+                Call<LoginResponse> call = RetrofitClient
+                        .getInstance()
+                        .getApi()
+                        .getDonorDetails(id);
+
+                call.enqueue(new Callback<LoginResponse>() {
+                    @Override
+                    public void onResponse(Call<LoginResponse> call, Response<LoginResponse> response) {
+                        if (response.isSuccessful()) {
+                            LoginResponse loginResponse = response.body();
+                            SharedPrefManager.getInstance(getContext()).saveDonor(loginResponse.getDonor());
+                            Toast.makeText(getContext(), "Updated successfully", Toast.LENGTH_SHORT).show();
+
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<LoginResponse> call, Throwable t) {
+                        Toast.makeText(getContext(), "Please check your connection", Toast.LENGTH_SHORT).show();
+
+                    }
+                });
+
+
                 name.setText(donor.getFirst_name() + "  " + donor.getLast_name());
                 county_name.setText(" " + donor.getCounty_name());
                 age.setText("Age: " + donor.getAge() + " years.");
                 swipeRefreshLayout.setRefreshing(false);
 
-
+                Glide.with(view.getContext()).load(image_url).into(imageView);
             }
         });
 
@@ -124,7 +152,7 @@ public class MeFragment extends Fragment implements View.OnClickListener {
                 builder.setPositiveButton("View Photo", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                                dialog.cancel();
+                        dialog.cancel();
                     }
                 });
 
@@ -154,11 +182,10 @@ public class MeFragment extends Fragment implements View.OnClickListener {
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (resultCode == RESULT_OK && requestCode == UCrop.REQUEST_CROP){
+        if (resultCode == RESULT_OK && requestCode == UCrop.REQUEST_CROP) {
             final Uri resultUri = UCrop.getOutput(data);
 
-        }
-        else if (resultCode ==UCrop.RESULT_ERROR){
+        } else if (resultCode == UCrop.RESULT_ERROR) {
             final Throwable cropError = UCrop.getError(data);
         }
     }
@@ -173,8 +200,43 @@ public class MeFragment extends Fragment implements View.OnClickListener {
         return super.onOptionsItemSelected(item);
     }
 
+//    @Override
+//    public void onResume() {
+//                super.onResume();
+//
+//                Donor donor = SharedPrefManager.getInstance(getActivity()).getDonor();
+//
+//                int id = donor.getId();
+//
+//                Call<LoginResponse> call = RetrofitClient
+//                        .getInstance()
+//                        .getApi()
+//                        .getDonorDetails(id);
+//
+//                call.enqueue(new Callback<LoginResponse>() {
+//                    @Override
+//                    public void onResponse(Call<LoginResponse> call, Response<LoginResponse> response) {
+//                        if (response.isSuccessful()){
+//                            LoginResponse loginResponse = response.body();
+//                            SharedPrefManager.getInstance(getContext()).saveDonor(loginResponse.getDonor());
+//                        }
+//                    }
+//
+//                    @Override
+//                    public void onFailure(Call<LoginResponse> call, Throwable t) {
+//                        Toast.makeText(getContext(), "Updated successfully", Toast.LENGTH_SHORT).show();
+//                    }
+//                });
+//
+//
+//                name.setText(String.format("%s  %s", donor.getFirst_name(), donor.getLast_name()));
+//                county_name.setText(String.format(" %s", donor.getCounty_name()));
+//                age.setText(String.format(Locale.getDefault(), "Age: %d years.", donor.getAge()));
+//
+//                Glide.with(Objects.requireNonNull(getContext())).load(image_url).into(imageView);
+//            }
+//    }
+
 
 }
-
-
 
