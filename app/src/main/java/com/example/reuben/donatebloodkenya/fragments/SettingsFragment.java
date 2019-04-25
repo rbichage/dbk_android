@@ -49,7 +49,7 @@ public class SettingsFragment extends Fragment implements View.OnClickListener {
         TextView name;
         name= view.findViewById(R.id.profile_name);
         Donor donor = SharedPrefManager.getInstance(getContext()).getDonor();
-        name.setText(donor.getFirst_name() + " " + donor.getLast_name());
+        name.setText(donor.getFirstName() + " " + donor.getLastName());
 
         TextView updateInfo, updateBlood, updatePassword;
 

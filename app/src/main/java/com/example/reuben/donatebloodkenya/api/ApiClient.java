@@ -1,5 +1,6 @@
 package com.example.reuben.donatebloodkenya.api;
 
+import com.example.reuben.donatebloodkenya.models.AppointmentResponse;
 import com.example.reuben.donatebloodkenya.models.DefaultApiResponse;
 import com.example.reuben.donatebloodkenya.models.Donor;
 import com.example.reuben.donatebloodkenya.models.Hospitals;
@@ -88,14 +89,23 @@ public interface ApiClient {
     Call<LoginResponse> getDonorDetails(@Path("id") int id);
 
     @FormUrlEncoded
-    @POST("/appointments")
-    Call<ResponseBody> postAppointment();
+    @POST("appointments/")
+    Call<AppointmentResponse> bookAppointment(
+            @Field("donor") int donor,
+            @Field("first_name") String firstName,
+            @Field("last_name") String lastName,
+            @Field("county_name") String countyName,
+            @Field("phone_number") String phoneNumber,
+            @Field("schedule_date") String scheduleDate,
+            @Field("hospital_name") String hospitalName
+            );
 
     @GET("hospitals/")
     Call<List<Hospitals>> getHospitals();
 
     @GET("donors/profile/")
     Call<List<Donor>> getDonors();
+
 
 
 

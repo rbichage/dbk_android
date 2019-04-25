@@ -1,6 +1,8 @@
 package com.example.reuben.donatebloodkenya.models;
 
-public class Hospitals {
+import java.io.Serializable;
+
+public class Hospitals implements Serializable {
     private Integer id;
     private String hospital_name;
     private  String county_name;
@@ -11,7 +13,7 @@ public class Hospitals {
     }
 
 
-    public Hospitals(Integer id, String hospital_name, String county_name, String phone_number) {
+    public Hospitals(Integer id, String hospital_name, String county_name, String phone_number)  {
         this.id = id;
         this.hospital_name = hospital_name;
         this.county_name = county_name;

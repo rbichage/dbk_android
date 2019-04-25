@@ -1,6 +1,7 @@
 package com.example.reuben.donatebloodkenya.adapters;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,9 +9,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.reuben.donatebloodkenya.R;
+import com.example.reuben.donatebloodkenya.activities.HospitalResultActivity;
 import com.example.reuben.donatebloodkenya.models.Hospitals;
 
 import java.util.List;
@@ -62,10 +65,11 @@ public class BookAppointmentAdapter extends RecyclerView.Adapter<BookAppointment
 
     }
 
-    class ViewHolder extends RecyclerView.ViewHolder {
+    class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         TextView hospital_name;
         TextView county_name;
         TextView hospital_phone;
+        CardView cardView;
 
         ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -73,7 +77,19 @@ public class BookAppointmentAdapter extends RecyclerView.Adapter<BookAppointment
             hospital_name = itemView.findViewById(R.id.tv_hospital_name);
             county_name = itemView.findViewById(R.id.tv_county_name);
             hospital_phone = itemView.findViewById(R.id.tv_hospital_phone);
+            cardView = itemView.findViewById(R.id.hospital_card);
+            cardView.setOnClickListener(this);
 
+        }
+
+        @Override
+        public void onClick(View v) {
+            if (v.getId()==R.id.hospital_card){
+                Hospitals hospitals = hospitals_list.get(getAdapterPosition());
+                Intent intent = new Intent(context, HospitalResultActivity.class);
+                intent.putExtra("hospital", hospitals);
+                context.startActivity(intent);
+            }
         }
     }
 }

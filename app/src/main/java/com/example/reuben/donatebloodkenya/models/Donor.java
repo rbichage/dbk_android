@@ -1,24 +1,148 @@
 package com.example.reuben.donatebloodkenya.models;
 
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
+
 public class Donor {
 
-    private  Integer id;
+    @SerializedName("id")
+    @Expose
+    private Integer id;
+    @SerializedName("username")
+    @Expose
     private String username;
-
+    @SerializedName("email")
+    @Expose
     private String email;
-    private String first_name;
-
+    @SerializedName("first_name")
+    @Expose
+    private String firstName;
+    @SerializedName("token")
+    @Expose
     private String token;
-
-    private String last_name;
-
+    @SerializedName("gender")
+    @Expose
+    private String gender;
+    @SerializedName("last_name")
+    @Expose
+    private String lastName;
+    @SerializedName("birthdate")
+    @Expose
     private String birthdate;
-
-    private String county_name;
-
+    @SerializedName("county_name")
+    @Expose
+    private String countyName;
+    @SerializedName("age")
+    @Expose
+    private Integer age;
+    @SerializedName("has_appointment")
+    @Expose
+    private Boolean hasAppointment;
+    @SerializedName("phone_number")
+    @Expose
+    private String phoneNumber;
+    @SerializedName("blood_group")
+    @Expose
+    private String bloodGroup;
+    @SerializedName("date_donated")
+    @Expose
+    private String dateDonated;
+    @SerializedName("image")
+    @Expose
     private String image;
 
-    private String blood_group;
+    public Donor(Integer id, String username, String email, String firstName, String token,
+                 String gender, String lastName, String birthdate, String countyName, Integer age,
+                 Boolean hasAppointment, String phoneNumber, String bloodGroup, String dateDonated,
+                 String image) {
+        this.id = id;
+        this.username = username;
+        this.email = email;
+        this.firstName = firstName;
+        this.token = token;
+        this.gender = gender;
+        this.lastName = lastName;
+        this.birthdate = birthdate;
+        this.countyName = countyName;
+        this.age = age;
+        this.hasAppointment = hasAppointment;
+        this.phoneNumber = phoneNumber;
+        this.bloodGroup = bloodGroup;
+        this.dateDonated = dateDonated;
+        this.image = image;
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
+    }
+
+    public String getGender() {
+        return gender;
+    }
+
+    public void setGender(String gender) {
+        this.gender = gender;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
+    public String getBirthdate() {
+        return birthdate;
+    }
+
+    public void setBirthdate(String birthdate) {
+        this.birthdate = birthdate;
+    }
+
+    public String getCountyName() {
+        return countyName;
+    }
+
+    public void setCountyName(String countyName) {
+        this.countyName = countyName;
+    }
 
     public Integer getAge() {
         return age;
@@ -28,76 +152,43 @@ public class Donor {
         this.age = age;
     }
 
-    private Integer age;
-
-    public Donor(Integer id, String username, String email, String first_name, String token, String last_name, String birthdate, Integer age, String county_name, String image, String blood_group, String phone_number, String date_donated) {
-        this.id = id;
-        this.username = username;
-        this.email = email;
-        this.first_name = first_name;
-        this.token = token;
-        this.last_name = last_name;
-        this.birthdate = birthdate;
-        this.age = age;
-        this.county_name = county_name;
-        this.image = image;
-        this.blood_group = blood_group;
-        this.phone_number = phone_number;
-        this.date_donated = date_donated;
+    public Boolean getHasAppointment() {
+        return hasAppointment;
     }
 
-
-    public Integer getId() {
-        return id;
+    public void setHasAppointment(Boolean hasAppointment) {
+        this.hasAppointment = hasAppointment;
     }
 
-    public String getUsername() {
-        return username;
+    public String getPhoneNumber() {
+        return phoneNumber;
     }
 
-    public String getEmail() {
-        return email;
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
     }
 
-    public String getFirst_name() {
-        return first_name;
+    public String getBloodGroup() {
+        return bloodGroup;
     }
 
-    public String getToken() {
-        return token;
+    public void setBloodGroup(String bloodGroup) {
+        this.bloodGroup = bloodGroup;
     }
 
-    public String getLast_name() {
-        return last_name;
+    public String getDateDonated() {
+        return dateDonated;
     }
 
-    public String getBirthdate() {
-        return birthdate;
+    public void setDateDonated(String dateDonated) {
+        this.dateDonated = dateDonated;
     }
-
-    public String getCounty_name() {
-        return county_name;
-    }
-
-
-    public String getPhone_number() {
-        return phone_number;
-    }
-
-    public String getDate_donated() {
-        return date_donated;
-    }
-
-    private String phone_number;
-
-    private String date_donated;
-
 
     public String getImage() {
         return image;
     }
 
-    public String getBlood_group() {
-        return blood_group;
+    public void setImage(String image) {
+        this.image = image;
     }
 }

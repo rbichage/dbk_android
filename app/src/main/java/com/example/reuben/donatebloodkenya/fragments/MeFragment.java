@@ -23,9 +23,11 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.bumptech.glide.Glide;
 import com.example.reuben.donatebloodkenya.R;
+import com.example.reuben.donatebloodkenya.activities.AppointmentList;
 import com.example.reuben.donatebloodkenya.activities.BookAppointment;
 import com.example.reuben.donatebloodkenya.activities.UpdateProfile;
 import com.example.reuben.donatebloodkenya.api.RetrofitClient;
+import com.example.reuben.donatebloodkenya.models.AppointmentResponse;
 import com.example.reuben.donatebloodkenya.models.Donor;
 import com.example.reuben.donatebloodkenya.models.LoginResponse;
 import com.example.reuben.donatebloodkenya.storage.SharedPrefManager;
@@ -41,7 +43,7 @@ import static android.app.Activity.RESULT_OK;
 
 public class MeFragment extends Fragment implements View.OnClickListener {
 
-    private TextView name, county_name, age;
+    private TextView name, county_name, age, tvAppoints;
     public static final int GET_FROM_GALLERY = 3;
     private String image_url;
     CircleImageView imageView;
@@ -53,6 +55,7 @@ public class MeFragment extends Fragment implements View.OnClickListener {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable final ViewGroup container, @Nullable Bundle savedInstanceState) {
 
         setHasOptionsMenu(true);
+
         return inflater.inflate(R.layout.fragment_me, container, false);
 
 
@@ -72,6 +75,7 @@ public class MeFragment extends Fragment implements View.OnClickListener {
         county_name = view.findViewById(R.id.county_name);
         age = view.findViewById(R.id.age);
         imageView = view.findViewById(R.id.user_profile_photo);
+        imageView.setImageDrawable(getResources().getDrawable(R.drawable.ic_launcher));
 
 
         Glide.with(view.getContext()).load(image_url).into(imageView);
@@ -79,54 +83,15 @@ public class MeFragment extends Fragment implements View.OnClickListener {
 
         imageView.setOnClickListener(this);
 
-        name.setText(donor.getFirst_name() + "  " + donor.getLast_name());
-        county_name.setText(" " + donor.getCounty_name());
+        name.setText(donor.getFirstName() + "  " + donor.getLastName());
+        county_name.setText(" " + donor.getCountyName());
         age.setText("Age: " + donor.getAge() + " years.");
-
-        final SwipeRefreshLayout swipeRefreshLayout = view.findViewById(R.id.donor_refresh);
-        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                Donor donor = SharedPrefManager.getInstance(getActivity()).getDonor();
-
-                int id = donor.getId();
-
-                Call<LoginResponse> call = RetrofitClient
-                        .getInstance()
-                        .getApi()
-                        .getDonorDetails(id);
-
-                call.enqueue(new Callback<LoginResponse>() {
-                    @Override
-                    public void onResponse(Call<LoginResponse> call, Response<LoginResponse> response) {
-                        if (response.isSuccessful()) {
-                            LoginResponse loginResponse = response.body();
-                            SharedPrefManager.getInstance(getContext()).saveDonor(loginResponse.getDonor());
-                            Toast.makeText(getContext(), "Updated successfully", Toast.LENGTH_SHORT).show();
-
-                        }
-                    }
-
-                    @Override
-                    public void onFailure(Call<LoginResponse> call, Throwable t) {
-                        Toast.makeText(getContext(), "Please check your connection", Toast.LENGTH_SHORT).show();
-
-                    }
-                });
-
-
-                name.setText(donor.getFirst_name() + "  " + donor.getLast_name());
-                county_name.setText(" " + donor.getCounty_name());
-                age.setText("Age: " + donor.getAge() + " years.");
-                swipeRefreshLayout.setRefreshing(false);
-
-                Glide.with(view.getContext()).load(image_url).into(imageView);
-            }
-        });
-
 
         view.findViewById(R.id.fab_book).setOnClickListener(this);
         view.findViewById(R.id.edit_profile).setOnClickListener(this);
+
+        tvAppoints = view.findViewById(R.id.tv_appoints);
+        tvAppoints.setOnClickListener(this);
 
 
     }
@@ -142,8 +107,26 @@ public class MeFragment extends Fragment implements View.OnClickListener {
                 break;
 
             case R.id.fab_book:
-                intent = new Intent(getContext(), BookAppointment.class);
-                startActivity(intent);
+                boolean hasAppointment = SharedPrefManager.getInstance(getContext()).getAppointment().getHasAppointment();
+
+                Toast.makeText(getContext(), String.valueOf(hasAppointment), Toast.LENGTH_SHORT).show();
+                if (!hasAppointment){
+                    intent = new Intent(getContext(), BookAppointment.class);
+                    startActivity(intent);
+                }
+
+                else {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                    builder.setMessage("You already have a pending appointment");
+                    builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                        }
+                    });
+                    builder.show();
+                }
+
                 break;
             case R.id.user_profile_photo:
                 AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
@@ -166,6 +149,11 @@ public class MeFragment extends Fragment implements View.OnClickListener {
                 });
 
                 builder.show();
+                break;
+
+            case R.id.tv_appoints:
+                startActivity(new Intent(getContext(), AppointmentList.class));
+                break;
 
         }
 

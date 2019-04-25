@@ -126,7 +126,6 @@ public class UserProfile extends AppCompatActivity implements BottomNavigationVi
 
 
 
-
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
 

@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+import com.example.reuben.donatebloodkenya.models.AppointmentResponse;
 import com.example.reuben.donatebloodkenya.models.AuthHeader;
 import com.example.reuben.donatebloodkenya.models.Donor;
 
@@ -36,15 +37,17 @@ public class SharedPrefManager {
         editor.putInt("id", donor.getId());
         editor.putString("username", donor.getUsername());
         editor.putString("email", donor.getEmail());
-        editor.putString("first_name", donor.getFirst_name());
+        editor.putString("first_name", donor.getFirstName());
         editor.putString("token", donor.getToken());
-        editor.putString("last_name", donor.getLast_name());
+        editor.putString("gender", donor.getGender());
+        editor.putString("last_name", donor.getLastName());
         editor.putString("birthdate", donor.getBirthdate());
-        editor.putString("county_name", donor.getCounty_name());
+        editor.putString("county_name", donor.getCountyName());
         editor.putInt("age", donor.getAge());
-        editor.putString("phone_number", donor.getPhone_number());
-        editor.putString("blood_group", donor.getBlood_group());
-        editor.putString("date_donated", donor.getDate_donated());
+        editor.putBoolean("has_appointment", donor.getHasAppointment());
+        editor.putString("phone_number", donor.getPhoneNumber());
+        editor.putString("blood_group", donor.getBloodGroup());
+        editor.putString("date_donated", donor.getDateDonated());
         editor.putString("image", donor.getImage());
 
         editor.apply();
@@ -66,17 +69,19 @@ public class SharedPrefManager {
                 sharedPreferences.getString("email", null),
                 sharedPreferences.getString("first_name", null),
                 sharedPreferences.getString("token", null),
+                sharedPreferences.getString("gender", null),
                 sharedPreferences.getString("last_name", null),
                 sharedPreferences.getString("birthdate", null),
-                sharedPreferences.getInt("age", 0),
                 sharedPreferences.getString("county_name", null),
-                sharedPreferences.getString("image", null),
-                sharedPreferences.getString("blood_group", null),
+                sharedPreferences.getInt("age", 0),
+                sharedPreferences.getBoolean("has_appointment", false),
                 sharedPreferences.getString("phone_number", null),
-                sharedPreferences.getString("date_donated", null)
+                sharedPreferences.getString("blood_group", null),
+                sharedPreferences.getString("date_donated", null),
+                sharedPreferences.getString("image", null)
 
 
-        );
+                );
     }
 
     public void clear(){
@@ -87,11 +92,27 @@ public class SharedPrefManager {
 
     }
 
-    public void saveAppointment(){
+    public void saveAppointment(AppointmentResponse appointmentResponse){
         SharedPreferences sharedPreferences = context.getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
 
+        editor.putString("appointment_county", appointmentResponse.getCountyName());
+        editor.putString("schedule_date", appointmentResponse.getScheduleDate());
+        editor.putString("hospital_name", appointmentResponse.getHospitalName());
+        editor.putBoolean("has_appointment", appointmentResponse.getHasAppointment());
         editor.apply();
+    }
+
+
+    public AppointmentResponse getAppointment(){
+        SharedPreferences sharedPreferences = context.getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE);
+
+        return new AppointmentResponse(
+                sharedPreferences.getString("appointment_county", null),
+                sharedPreferences.getString("schedule_date", null),
+                sharedPreferences.getString("hospital_name", null),
+                sharedPreferences.getBoolean("has_appointment", false)
+        );
     }
 
     public void saveAuthHeader(AuthHeader authHeader){

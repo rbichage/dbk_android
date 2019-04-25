@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<androidx.swiperefreshlayout.widget.SwipeRefreshLayout xmlns:tools="http://schemas.android.com/tools"
+<RelativeLayout xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/donor_refresh"
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
@@ -44,8 +44,8 @@
                 android:src="@drawable/ic_launcher"
                 app:civ_border_color="@color/md_white_1000"
                 app:civ_border_width="1dp"
-                app:civ_circle_background_color="@color/md_black_1000"
-                tools:ignore="ContentDescription" />
+                tools:ignore="ContentDescription"
+                />
 
         <RelativeLayout
             android:id="@+id/profile_layout"
@@ -127,6 +127,7 @@
                 android:textSize="20sp"
                 />
             <TextView
+                android:id="@+id/tv_appoints"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="5dp"
@@ -159,4 +160,4 @@
         app:srcCompat="@drawable/ic_add" />
 </RelativeLayout>
 
-</androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+</RelativeLayout>
