@@ -75,7 +75,7 @@ public interface ApiClient {
 
     @FormUrlEncoded
     @PUT("donors/profile/{id}/")
-    Call <LoginResponse> updateBloodType(
+    Call <Donor> updateBloodType(
             @Path("id") int id,
             @Field("blood_group")String blood_group
     );

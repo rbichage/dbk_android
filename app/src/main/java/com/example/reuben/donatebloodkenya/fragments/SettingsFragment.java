@@ -15,14 +15,17 @@ import androidx.fragment.app.Fragment;
 import com.bumptech.glide.Glide;
 import com.example.reuben.donatebloodkenya.R;
 import com.example.reuben.donatebloodkenya.activities.BloodTypeActivity;
+import com.example.reuben.donatebloodkenya.activities.Login;
 import com.example.reuben.donatebloodkenya.activities.UpdatePassword;
 import com.example.reuben.donatebloodkenya.models.Donor;
 import com.example.reuben.donatebloodkenya.storage.SharedPrefManager;
+import com.example.reuben.donatebloodkenya.utils.Constants;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class SettingsFragment extends Fragment implements View.OnClickListener {
     CircleImageView imageView;
+    TextView tvLogout;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -62,10 +65,13 @@ public class SettingsFragment extends Fragment implements View.OnClickListener {
         updateBlood = view.findViewById(R.id.update_blood_type);
         updateBlood.setOnClickListener(this);
 
+        tvLogout = view.findViewById(R.id.tv_logout);
+        tvLogout.setOnClickListener(this);
+
         imageView = view.findViewById(R.id.user_profile_image);
 
 
-        String image_url = "http://192.168.43.65:8000" + donor.getImage();
+        String image_url = Constants.IMAGE_URL + donor.getImage();
         if (donor.getImage().startsWith("/")){
             Glide.with(this)
                     .load(image_url)
@@ -91,6 +97,13 @@ public class SettingsFragment extends Fragment implements View.OnClickListener {
 
             case R.id.update_blood_type:
                 startActivity(new Intent(getContext(), BloodTypeActivity.class));
+                break;
+
+            case R.id.tv_logout:
+                SharedPrefManager.getInstance(getContext()).clear();
+                Intent intent = new Intent(getContext(), Login.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK| Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(intent);
                 break;
         }
     }

@@ -3,7 +3,6 @@ package com.example.reuben.donatebloodkenya.activities;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
-import android.view.View;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -17,12 +16,10 @@ import com.example.reuben.donatebloodkenya.fragments.NewsFragment;
 import com.example.reuben.donatebloodkenya.fragments.SettingsFragment;
 import com.example.reuben.donatebloodkenya.storage.SharedPrefManager;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.mikepenz.materialdrawer.Drawer;
 import com.mikepenz.materialdrawer.DrawerBuilder;
 import com.mikepenz.materialdrawer.model.DividerDrawerItem;
 import com.mikepenz.materialdrawer.model.PrimaryDrawerItem;
 import com.mikepenz.materialdrawer.model.SecondaryDrawerItem;
-import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 
 import java.util.Objects;
 
@@ -62,35 +59,32 @@ public class UserProfile extends AppCompatActivity implements BottomNavigationVi
                         new DividerDrawerItem(),
                         contact, about
                 )
-                .withOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener() {
-
-                    @Override
-                    public boolean onItemClick(View view, int position, IDrawerItem drawerItem) {
+                .withOnDrawerItemClickListener((view, position, drawerItem) -> {
 
 
-                        if (drawerItem.equals(4)) {
-                            SharedPrefManager.getInstance(getApplicationContext()).clear();
-                            Intent intent = new Intent(getApplicationContext(), Login.class);
-                            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                            startActivity(intent);
-                        }
-
-                        if (drawerItem.equals(6)) {
-                            Intent intent = new Intent(getApplicationContext(), About.class);
-                            startActivity(intent);
-                        }
-                        if (drawerItem.equals(4)) {
-                            Fragment settings = new SettingsFragment();
-                            getSupportFragmentManager().beginTransaction()
-                                    .replace(R.id.user_container, settings, "Settings")
-                                    .addToBackStack(null)
-                                    .commit();
-
-                        }
-
-
-                        return false;
+                    if (drawerItem.equals(4)) {
+                        SharedPrefManager.getInstance(getApplicationContext()).clear();
+                        Intent intent = new Intent(getApplicationContext(), Login.class);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                        startActivity(intent);
                     }
+
+
+                    if (drawerItem.equals(6)) {
+                        Intent intent = new Intent(getApplicationContext(), About.class);
+                        startActivity(intent);
+                    }
+                    if (drawerItem.equals(3)) {
+                        Fragment settings1 = new SettingsFragment();
+                        getSupportFragmentManager().beginTransaction()
+                                .replace(R.id.user_container, settings1, "Settings")
+                                .addToBackStack(null)
+                                .commit();
+
+                    }
+
+
+                    return false;
                 })
                 .build();
 
@@ -152,6 +146,7 @@ public class UserProfile extends AppCompatActivity implements BottomNavigationVi
             case R.id.nav_donors:
                 fragment = new DonorsFragment();
                 title ="Donors";
+                break;
 
         }
 

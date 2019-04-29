@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -27,6 +28,7 @@ import com.example.reuben.donatebloodkenya.activities.UpdateProfile;
 import com.example.reuben.donatebloodkenya.api.RetrofitClient;
 import com.example.reuben.donatebloodkenya.models.Donor;
 import com.example.reuben.donatebloodkenya.storage.SharedPrefManager;
+import com.example.reuben.donatebloodkenya.utils.Constants;
 import com.theartofdev.edmodo.cropper.CropImage;
 import com.theartofdev.edmodo.cropper.CropImageView;
 
@@ -73,7 +75,10 @@ public class MeFragment extends Fragment implements View.OnClickListener {
 
 
         Donor donor = SharedPrefManager.getInstance(getActivity()).getDonor();
-        image_url = "http://192.168.43.65:8000" + donor.getImage();
+//        image_url = "http://192.168.43.65:8000" + donor.getImage();
+                image_url = Constants.IMAGE_URL + donor.getImage();
+
+
 
         name = view.findViewById(R.id.name);
         county_name = view.findViewById(R.id.county_name);
@@ -84,17 +89,22 @@ public class MeFragment extends Fragment implements View.OnClickListener {
         previousDonations = view.findViewById(R.id.previous_donations);
         previousDonations.setOnClickListener(this);
 
-        if (donor.getImage().startsWith("/")){
-            Glide.with(this)
-                    .load(image_url)
-                    .placeholder(getResources().getDrawable(R.drawable.ic_launcher))
-                    .into(imageView);
+        if (!TextUtils.isEmpty(donor.getImage())) {
+            if (donor.getImage().startsWith("/")) {
+                Glide.with(this)
+                        .load(image_url)
+                        .placeholder(getResources().getDrawable(R.drawable.ic_launcher))
+                        .into(imageView);
+            } else
+                Glide.with(this)
+                        .load(donor.getImage())
+                        .placeholder(getResources().getDrawable(R.drawable.ic_launcher))
+                        .into(imageView);
         }
+
         else
-            Glide.with(this)
-                    .load(donor.getImage())
-                    .placeholder(getResources().getDrawable(R.drawable.ic_launcher))
-                    .into(imageView);
+            imageView.setImageDrawable(getResources().getDrawable(R.drawable.ic_launcher));
+
 
 
 
@@ -126,8 +136,7 @@ public class MeFragment extends Fragment implements View.OnClickListener {
             case R.id.fab_book:
                 boolean hasAppointment = SharedPrefManager.getInstance(getContext()).getAppointment().getHasAppointment();
 
-                Toast.makeText(getContext(), String.valueOf(hasAppointment), Toast.LENGTH_SHORT).show();
-                if (hasAppointment){
+                if (!hasAppointment){
                     intent = new Intent(getContext(), BookAppointment.class);
                     startActivity(intent);
                 }
