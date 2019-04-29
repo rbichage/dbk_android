@@ -16,12 +16,12 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.reuben.donatebloodkenya.R;
 import com.example.reuben.donatebloodkenya.api.RetrofitClient;
 import com.example.reuben.donatebloodkenya.models.Donor;
-import com.example.reuben.donatebloodkenya.models.LoginResponse;
 import com.example.reuben.donatebloodkenya.storage.SharedPrefManager;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
 import java.util.Calendar;
 
 import retrofit2.Call;
@@ -144,32 +144,34 @@ public class UpdateProfile extends AppCompatActivity implements View.OnClickList
 
         Donor donor = SharedPrefManager.getInstance(getApplicationContext()).getDonor();
 
-        Call<LoginResponse> call = RetrofitClient.getInstance()
+        Call<Donor> call = RetrofitClient.getInstance()
                 .getApi().updateProfile(donor.getId(), first_name, last_name, email, birthdate, county_name, gender, phone_number);
 
-        call.enqueue(new Callback<LoginResponse>() {
+        call.enqueue(new Callback<Donor>() {
             @Override
-            public void onResponse(Call<LoginResponse> call, Response<LoginResponse> response) {
+            public void onResponse(Call<Donor> call, Response<Donor> response) {
                 String s = null;
 
                 if (response.isSuccessful()){
                     assert response.body() != null;
-                    s = response.body().getMessage();
-                    SharedPrefManager.getInstance(getApplicationContext()).saveDonor(response.body().getDonor());
-                    Toast.makeText(UpdateProfile.this,s , Toast.LENGTH_LONG).show();
+                    SharedPrefManager.getInstance(getApplicationContext()).saveDonor(response.body());
+                    Toast.makeText(UpdateProfile.this, "updated successfully" , Toast.LENGTH_LONG).show();
                     progressDialog.dismiss();
 
                     onBackPressed();
                 }
 
-                if (s!=null){
+                else {
                     try {
+                        s = response.errorBody().string();
                         JSONObject jsonObject = new JSONObject(s);
                         Toast.makeText(UpdateProfile.this, jsonObject.getString("message"), Toast.LENGTH_LONG).show();
                         progressDialog.dismiss();
                     } catch (JSONException e) {
                         e.printStackTrace();
                         progressDialog.dismiss();
+                    } catch (IOException e) {
+                        e.printStackTrace();
                     }
                 }
 
@@ -177,7 +179,7 @@ public class UpdateProfile extends AppCompatActivity implements View.OnClickList
             }
 
             @Override
-            public void onFailure(Call<LoginResponse> call, Throwable t) {
+            public void onFailure(Call<Donor> call, Throwable t) {
                 progressDialog.dismiss();
                 Toast.makeText(UpdateProfile.this, "Unable to connect, check your settings", Toast.LENGTH_LONG).show();
 

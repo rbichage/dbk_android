@@ -74,9 +74,9 @@ public class BookAppointmentAdapter extends RecyclerView.Adapter<BookAppointment
         ViewHolder(@NonNull View itemView) {
             super(itemView);
 
-            hospital_name = itemView.findViewById(R.id.tv_hospital_name);
+            hospital_name = itemView.findViewById(R.id.tv_donaton_date);
             county_name = itemView.findViewById(R.id.tv_county_name);
-            hospital_phone = itemView.findViewById(R.id.tv_hospital_phone);
+            hospital_phone = itemView.findViewById(R.id.tv_hospital_name);
             cardView = itemView.findViewById(R.id.hospital_card);
             cardView.setOnClickListener(this);
 

@@ -2,6 +2,7 @@ package com.example.reuben.donatebloodkenya.activities;
 
 import android.app.ProgressDialog;
 import android.os.Bundle;
+import android.util.Base64;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -12,6 +13,9 @@ import androidx.appcompat.widget.Toolbar;
 
 import com.example.reuben.donatebloodkenya.R;
 import com.example.reuben.donatebloodkenya.api.RetrofitClient;
+import com.example.reuben.donatebloodkenya.models.AuthHeader;
+import com.example.reuben.donatebloodkenya.models.Donor;
+import com.example.reuben.donatebloodkenya.storage.SharedPrefManager;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -73,13 +77,13 @@ public class UpdatePassword extends AppCompatActivity implements View.OnClickLis
     }
 
     private void updatePassword() {
-        String old_password = etOldPassword.getText().toString().trim();
-        if (old_password.isEmpty()){
+        String current_password = etOldPassword.getText().toString().trim();
+        if (current_password.isEmpty()){
             etOldPassword.setError("This field is required");
             return;
         }
 
-        if (old_password.length() <8){
+        if (current_password.length() <8){
             etOldPassword.setError("This password is too short");
             return;
         }
@@ -95,7 +99,7 @@ public class UpdatePassword extends AppCompatActivity implements View.OnClickLis
             return;
         }
 
-        String new_password = etRepeatNewPassword.getText().toString().trim();
+        final String new_password = etRepeatNewPassword.getText().toString().trim();
         if (!new_password.matches(new_password_test)){
             etRepeatNewPassword.setError("These passwords do not match");
             etRepeatNewPassword.requestFocus();
@@ -112,7 +116,7 @@ public class UpdatePassword extends AppCompatActivity implements View.OnClickLis
         Call<ResponseBody> call = RetrofitClient
                 .getInstance()
                 .getApi()
-                .updatePassword(old_password, new_password);
+                .updatePassword(new_password, current_password);
 
         call.enqueue(new Callback<ResponseBody>() {
             @Override
@@ -120,7 +124,12 @@ public class UpdatePassword extends AppCompatActivity implements View.OnClickLis
                 if (response.isSuccessful()){
                     Toast.makeText(UpdatePassword.this, "Password updated successfully", Toast.LENGTH_SHORT).show();
                     progressDialog.dismiss();
+                    String username = SharedPrefManager.getInstance(getApplicationContext()).getDonor().getUsername();
+                    String auth = Base64.encodeToString((username +":"+ new_password).getBytes(), Base64.NO_WRAP);
+                    AuthHeader authHeader = new AuthHeader(auth);
+                    SharedPrefManager.getInstance(getApplicationContext()).saveAuthHeader(authHeader);
                     onBackPressed();
+
 
                 }
 
@@ -128,7 +137,7 @@ public class UpdatePassword extends AppCompatActivity implements View.OnClickLis
                     try {
                         String s= response.errorBody().string();
                         JSONObject jsonObject = new JSONObject(s);
-                        Toast.makeText(UpdatePassword.this, jsonObject.getString("error"), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(UpdatePassword.this, jsonObject.getString("detail"), Toast.LENGTH_SHORT).show();
                         progressDialog.dismiss();
 
                     } catch (IOException e) {

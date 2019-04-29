@@ -1,11 +1,9 @@
 package com.example.reuben.donatebloodkenya.fragments;
 
 import android.annotation.SuppressLint;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -19,21 +17,27 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.bumptech.glide.Glide;
 import com.example.reuben.donatebloodkenya.R;
 import com.example.reuben.donatebloodkenya.activities.AppointmentList;
 import com.example.reuben.donatebloodkenya.activities.BookAppointment;
+import com.example.reuben.donatebloodkenya.activities.DonationsLIstActivity;
 import com.example.reuben.donatebloodkenya.activities.UpdateProfile;
 import com.example.reuben.donatebloodkenya.api.RetrofitClient;
-import com.example.reuben.donatebloodkenya.models.AppointmentResponse;
 import com.example.reuben.donatebloodkenya.models.Donor;
-import com.example.reuben.donatebloodkenya.models.LoginResponse;
 import com.example.reuben.donatebloodkenya.storage.SharedPrefManager;
-import com.yalantis.ucrop.UCrop;
+import com.theartofdev.edmodo.cropper.CropImage;
+import com.theartofdev.edmodo.cropper.CropImageView;
+
+import java.io.File;
+import java.io.IOException;
 
 import de.hdodenhof.circleimageview.CircleImageView;
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -43,8 +47,8 @@ import static android.app.Activity.RESULT_OK;
 
 public class MeFragment extends Fragment implements View.OnClickListener {
 
-    private TextView name, county_name, age, tvAppoints;
-    public static final int GET_FROM_GALLERY = 3;
+    private TextView name, county_name, age, tvAppoints, previousDonations;
+    private static final int GET_FROM_GALLERY = 3;
     private String image_url;
     CircleImageView imageView;
 
@@ -69,7 +73,7 @@ public class MeFragment extends Fragment implements View.OnClickListener {
 
 
         Donor donor = SharedPrefManager.getInstance(getActivity()).getDonor();
-        image_url = "http://10.0.2.2:8000" + donor.getImage();
+        image_url = "http://192.168.43.65:8000" + donor.getImage();
 
         name = view.findViewById(R.id.name);
         county_name = view.findViewById(R.id.county_name);
@@ -77,8 +81,21 @@ public class MeFragment extends Fragment implements View.OnClickListener {
         imageView = view.findViewById(R.id.user_profile_photo);
         imageView.setImageDrawable(getResources().getDrawable(R.drawable.ic_launcher));
 
+        previousDonations = view.findViewById(R.id.previous_donations);
+        previousDonations.setOnClickListener(this);
 
-        Glide.with(view.getContext()).load(image_url).into(imageView);
+        if (donor.getImage().startsWith("/")){
+            Glide.with(this)
+                    .load(image_url)
+                    .placeholder(getResources().getDrawable(R.drawable.ic_launcher))
+                    .into(imageView);
+        }
+        else
+            Glide.with(this)
+                    .load(donor.getImage())
+                    .placeholder(getResources().getDrawable(R.drawable.ic_launcher))
+                    .into(imageView);
+
 
 
         imageView.setOnClickListener(this);
@@ -110,7 +127,7 @@ public class MeFragment extends Fragment implements View.OnClickListener {
                 boolean hasAppointment = SharedPrefManager.getInstance(getContext()).getAppointment().getHasAppointment();
 
                 Toast.makeText(getContext(), String.valueOf(hasAppointment), Toast.LENGTH_SHORT).show();
-                if (!hasAppointment){
+                if (hasAppointment){
                     intent = new Intent(getContext(), BookAppointment.class);
                     startActivity(intent);
                 }
@@ -118,12 +135,7 @@ public class MeFragment extends Fragment implements View.OnClickListener {
                 else {
                     AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
                     builder.setMessage("You already have a pending appointment");
-                    builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            dialog.dismiss();
-                        }
-                    });
+                    builder.setPositiveButton("OK", (dialog, which) -> dialog.dismiss());
                     builder.show();
                 }
 
@@ -132,21 +144,9 @@ public class MeFragment extends Fragment implements View.OnClickListener {
                 AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
                 builder.setTitle("Profile Photo");
 
-                builder.setPositiveButton("View Photo", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.cancel();
-                    }
-                });
+                builder.setPositiveButton("View Photo", (dialog, which) -> dialog.cancel());
 
-                builder.setNegativeButton("Update Photo", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        startActivityForResult(new
-                                Intent(Intent.ACTION_PICK,
-                                MediaStore.Images.Media.INTERNAL_CONTENT_URI), GET_FROM_GALLERY);
-                    }
-                });
+                builder.setNegativeButton("Update Photo", (dialog, which) -> updatePhoto());
 
                 builder.show();
                 break;
@@ -155,10 +155,97 @@ public class MeFragment extends Fragment implements View.OnClickListener {
                 startActivity(new Intent(getContext(), AppointmentList.class));
                 break;
 
+            case R.id.previous_donations:
+                startActivity(new Intent(getContext(), DonationsLIstActivity.class));
+                break;
+
         }
 
 
     }
+
+    private void updatePhoto() {
+        CropImage.activity()
+                .setGuidelines(CropImageView.Guidelines.ON)
+                .setAspectRatio(1, 1)
+                .setOutputCompressQuality(40)
+                .start(getContext(), this);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE){
+            CropImage.ActivityResult result = CropImage.getActivityResult(data);
+
+
+            if (resultCode == RESULT_OK){
+                final Uri resultUri = result.getUri();
+
+                File file = new File(resultUri.getPath());
+
+                MultipartBody.Part part = MultipartBody.Part.createFormData("image", file.getName(), RequestBody.create(MediaType.parse("image/*"), file));
+                int id = SharedPrefManager.getInstance(getContext()).getDonor().getId();
+
+                Call<ResponseBody> call = RetrofitClient.getInstance()
+                        .getApi().updatePhoto(id, part);
+
+                call.enqueue(new Callback<ResponseBody>() {
+                    @Override
+                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                        if (response.isSuccessful()){
+                            imageView.setImageURI(resultUri);
+                            getDonor();
+                        }
+                        else {
+                            try {
+                                Toast.makeText(getContext(), response.errorBody().string(), Toast.LENGTH_SHORT).show();
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<ResponseBody> call, Throwable t) {
+
+                    }
+                });
+
+
+
+
+            }
+
+            else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE){
+                Exception error = result.getError();
+                Toast.makeText(getContext(), error.toString(), Toast.LENGTH_SHORT).show();
+            }
+
+        }
+
+    }
+
+    private void getDonor() {
+        int id = SharedPrefManager.getInstance(getContext()).getDonor().getId();
+        Call<Donor> call = RetrofitClient.getInstance().getApi().getDonorDetails(id);
+        call.enqueue(new Callback<Donor>() {
+            @Override
+            public void onResponse(Call<Donor> call, Response<Donor> response) {
+                Donor donor = response.body();
+                SharedPrefManager.getInstance(getContext()).saveDonor(donor);
+                Glide.with(getContext()).load(donor.getImage()).into(imageView);
+
+            }
+
+            @Override
+            public void onFailure(Call<Donor> call, Throwable t) {
+
+            }
+        });
+
+    }
+
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
@@ -166,17 +253,7 @@ public class MeFragment extends Fragment implements View.OnClickListener {
         super.onCreateOptionsMenu(menu, inflater);
     }
 
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
 
-        if (resultCode == RESULT_OK && requestCode == UCrop.REQUEST_CROP) {
-            final Uri resultUri = UCrop.getOutput(data);
-
-        } else if (resultCode == UCrop.RESULT_ERROR) {
-            final Throwable cropError = UCrop.getError(data);
-        }
-    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -188,42 +265,6 @@ public class MeFragment extends Fragment implements View.OnClickListener {
         return super.onOptionsItemSelected(item);
     }
 
-//    @Override
-//    public void onResume() {
-//                super.onResume();
-//
-//                Donor donor = SharedPrefManager.getInstance(getActivity()).getDonor();
-//
-//                int id = donor.getId();
-//
-//                Call<LoginResponse> call = RetrofitClient
-//                        .getInstance()
-//                        .getApi()
-//                        .getDonorDetails(id);
-//
-//                call.enqueue(new Callback<LoginResponse>() {
-//                    @Override
-//                    public void onResponse(Call<LoginResponse> call, Response<LoginResponse> response) {
-//                        if (response.isSuccessful()){
-//                            LoginResponse loginResponse = response.body();
-//                            SharedPrefManager.getInstance(getContext()).saveDonor(loginResponse.getDonor());
-//                        }
-//                    }
-//
-//                    @Override
-//                    public void onFailure(Call<LoginResponse> call, Throwable t) {
-//                        Toast.makeText(getContext(), "Updated successfully", Toast.LENGTH_SHORT).show();
-//                    }
-//                });
-//
-//
-//                name.setText(String.format("%s  %s", donor.getFirst_name(), donor.getLast_name()));
-//                county_name.setText(String.format(" %s", donor.getCounty_name()));
-//                age.setText(String.format(Locale.getDefault(), "Age: %d years.", donor.getAge()));
-//
-//                Glide.with(Objects.requireNonNull(getContext())).load(image_url).into(imageView);
-//            }
-//    }
 
 
 }

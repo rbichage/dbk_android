@@ -13,8 +13,8 @@ import retrofit2.converter.scalars.ScalarsConverterFactory;
 public class RetrofitNoAuthClient {
 
     //    private static final String BASE_URL ="https://dbke.herokuapp.com/api/v1/";
-    private  static  final String BASE_URL = "http://10.0.2.2:8000/v1/";
-//      private static final String BASE_URL = "http://192.168.43.65:8000/api/v1/";
+//    private  static  final String BASE_URL = "http://10.0.2.2:8000/v1/";
+    private static final String BASE_URL = "http://192.168.43.65:8000/api/v1/";
 
 
     private static RetrofitNoAuthClient retrofitInstance;

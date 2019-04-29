@@ -2,21 +2,26 @@ package com.example.reuben.donatebloodkenya.api;
 
 import com.example.reuben.donatebloodkenya.models.AppointmentResponse;
 import com.example.reuben.donatebloodkenya.models.DefaultApiResponse;
+import com.example.reuben.donatebloodkenya.models.Donation;
 import com.example.reuben.donatebloodkenya.models.Donor;
 import com.example.reuben.donatebloodkenya.models.Hospitals;
 import com.example.reuben.donatebloodkenya.models.LoginResponse;
-import com.example.reuben.donatebloodkenya.models.NewsResponse;
+import com.example.reuben.donatebloodkenya.models.News;
 
 import java.util.List;
 
+import okhttp3.MultipartBody;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
+import retrofit2.http.Multipart;
 import retrofit2.http.POST;
 import retrofit2.http.PUT;
+import retrofit2.http.Part;
 import retrofit2.http.Path;
+import retrofit2.http.Query;
 
 public interface ApiClient {
 
@@ -25,7 +30,7 @@ public interface ApiClient {
 
 
     @GET("news/")
-    Call<NewsResponse> getNews();
+    Call<List<News>> getNews();
 
     @FormUrlEncoded
     @POST("signup/")
@@ -48,7 +53,7 @@ public interface ApiClient {
 
     @FormUrlEncoded
     @PUT("donors/profile/{id}/")
-    Call<LoginResponse> updateProfile(
+    Call<Donor> updateProfile(
                                      @Path("id") int id,
                                      @Field("first_name") String first_name,
                                      @Field("last_name") String last_name,
@@ -62,14 +67,11 @@ public interface ApiClient {
     );
 
 
-    @FormUrlEncoded
+    @Multipart
     @PUT("donors/profile/{id}/")
-    Call <DefaultApiResponse> updatePhoto(
+    Call <ResponseBody> updatePhoto(
             @Path("id") int id,
-            @Field("current_password")Object image
-
-
-    );
+            @Part MultipartBody.Part file);
 
     @FormUrlEncoded
     @PUT("donors/profile/{id}/")
@@ -79,14 +81,14 @@ public interface ApiClient {
     );
 
     @FormUrlEncoded
-    @PUT("update-password/")
+    @POST("password/")
     Call<ResponseBody> updatePassword(
-            @Field("old_password") String old_password,
-            @Field("new_password") String new_password
+            @Field("new_password") String new_password,
+            @Field("current_password") String current_password
     );
 
     @GET("donors/profile/{id}/")
-    Call<LoginResponse> getDonorDetails(@Path("id") int id);
+    Call<Donor> getDonorDetails(@Path("id") int id);
 
     @FormUrlEncoded
     @POST("appointments/")
@@ -101,10 +103,16 @@ public interface ApiClient {
             );
 
     @GET("hospitals/")
-    Call<List<Hospitals>> getHospitals();
+    Call<List<Hospitals>> getHospitals(@Query("search") String county_name);
 
     @GET("donors/profile/")
     Call<List<Donor>> getDonors();
+
+    @GET("donations/")
+    Call<List<Donation>> getDonations(@Query("search") String username);
+
+
+
 
 
 

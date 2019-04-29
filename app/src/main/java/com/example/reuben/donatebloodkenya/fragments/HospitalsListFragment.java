@@ -14,7 +14,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.reuben.donatebloodkenya.R;
 import com.example.reuben.donatebloodkenya.adapters.BookAppointmentAdapter;
 import com.example.reuben.donatebloodkenya.api.RetrofitClient;
+import com.example.reuben.donatebloodkenya.models.Donor;
 import com.example.reuben.donatebloodkenya.models.Hospitals;
+import com.example.reuben.donatebloodkenya.storage.SharedPrefManager;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,16 +41,18 @@ public class HospitalsListFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+
         hospitals = new ArrayList<>();
         recyclerView = view.findViewById(R.id.hospitals_recycler);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         bookAppointmentAdapter = new BookAppointmentAdapter(getContext(), hospitals);
         recyclerView.setAdapter(bookAppointmentAdapter);
 
+        String county_name = SharedPrefManager.getInstance(getContext()).getDonor().getCountyName();
         Call<List<Hospitals>> call = RetrofitClient
                 .getInstance()
                 .getApi()
-                .getHospitals();
+                .getHospitals(county_name);
 
         call.enqueue(new Callback<List<Hospitals>>() {
             @Override

@@ -18,7 +18,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
         <TextView
-            android:id="@+id/tv_hospital_name"
+            android:id="@+id/tv_donaton_date"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Mombasa Hospital"
@@ -33,10 +33,10 @@
             android:id="@+id/tv_county_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/tv_hospital_name"
+            android:layout_below="@+id/tv_donaton_date"
             android:layout_marginTop="8dp"
             android:text="Mombasa County"
-            android:layout_alignStart="@id/tv_hospital_name"
+            android:layout_alignStart="@id/tv_donaton_date"
             android:layout_marginBottom="8dp"
             />
         <View
@@ -50,14 +50,14 @@
             android:layout_marginEnd="8dp"
             />
         <TextView
-            android:id="@+id/tv_hospital_phone"
+            android:id="@+id/tv_hospital_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/divider_view"
             android:text="+254721252125"
             android:layout_marginBottom="8dp"
-            android:layout_alignStart="@id/tv_hospital_name"
-            android:layout_alignEnd="@id/tv_hospital_name"
+            android:layout_alignStart="@id/tv_donaton_date"
+            android:layout_alignEnd="@id/tv_donaton_date"
             />
 
     </RelativeLayout>
